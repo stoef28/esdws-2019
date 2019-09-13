@@ -26,9 +26,19 @@ todo: how to set it up on MAC and Linux
 My current IDE is IntelliJ v2019.2.2. You can download it here: <a href="https://www.jetbrains.com/idea/download/#section=windows">IntelliJ</a>. Make sure you download the <b>Ultimate Edition</b>.
  
 ### Installing
-Go to <a href="https://github.com/ozihler/esdws-2019">Github</a> and Clone the repository (https://github.com/ozihler/esdws-2019)
+The project can be found on <a href="https://github.com/ozihler/esdws-2019">Github</a>
 ```
-
+1. Open IntelliJ, close any open project.
+2. Select "Check out from Version Control > Git" 
+3. paste the URL (e.g. https://github.com/ozihler/esdws-2019.git for HTTPS) and press "Clone". You may optionally have to type in your Github credentials here.
+4. If everything went alright, Gradle will build the project.
+5. IntelliJ may show a little window in the right corner, which says "Frameworks Detected - Angular CLI framework is detected". Press "Configure" and select Angular CLI > angular.json
+6. Go to the Terminal, switch to the frontend folder (cd frontend), and enter npm install. This will download all the required frontend dependencies
+7. In the same command, type "npm run ng serve". This will run the frontend server. Open a browser and navigate to http://localhost:4200 to see the frontend page.
+8. Run "Application" from the run menu. This will run the backend Spring Boot Server at http://localhost:5000.
+9. Once both frontend and backend run, you can try the library yourself.¨
+10. For the course important are the backend tests. Go to backend/src/test, right-click on the folder and click "Run tests".
+11. If the tests are green, you are ready for the workshop.
 ```
 
 And repeat
