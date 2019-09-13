@@ -8,20 +8,26 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
-
+The project uses Angular 8, Spring Boot 2 with Java 11 and Gradle 5. Additionally, you need GIT and a Github Account to be able to use this project. <br/>
+Node version 10.16.3 and NPM version 6.9.0, get it e.g. here: <a>https://nodejs.org/en/download/</a> <br />
+Java: Oracle JDK 11 or OpenJDK 11, get it e.g. here: https://jdk.java.net/archive/ <br /><br />
+Also, set environment variables JAVA_HOME and NODE_HOME to the respective installation location. 
+<br />
+on my Windows PC, they are located at <br />
 ```
-Give examples
+C:\Program Files\Java\jdk-11    
+C:\Program Files\nodejs
 ```
-
+<br/>
+also, add %JAVA_HOME%\bin and %NODE_HOME% to your path variables if you are on a Windows PC
+<br />
+todo: how to set it up on MAC and Linux
+<br />
+My current IDE is IntelliJ v2019.2.2. You can download it here: <a href="https://www.jetbrains.com/idea/download/#section=windows">IntelliJ</a>. Make sure you download the <b>Ultimate Edition</b>.
+ 
 ### Installing
-
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
-
 ```
-Give the example
+
 ```
 
 And repeat
