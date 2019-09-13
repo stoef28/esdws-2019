@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class Library {
         final BufferedReader bufferedReader = new BufferedReader(
                 new InputStreamReader(
                         resourceLoader.getResource("classpath:books.csv").getInputStream(),
-                        Charset.forName("utf-8")
+                        StandardCharsets.UTF_8
                 )
         );
         while (bufferedReader.ready()) {
@@ -51,7 +52,7 @@ public class Library {
         final BufferedReader bufferedReader = new BufferedReader(
                 new InputStreamReader(
                         resourceLoader.getResource("classpath:books.csv").getInputStream(),
-                        Charset.forName("utf-8")
+                        StandardCharsets.UTF_8
                 )
         );
         final List<String[]> books = new ArrayList<>();
