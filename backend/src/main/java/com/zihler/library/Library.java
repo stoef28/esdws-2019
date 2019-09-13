@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.*;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,15 +22,18 @@ public class Library {
     @Autowired
     public Library(ResourceLoader resourceLoader) {
         this.resourceLoader = resourceLoader;
-
     }
 
-    @GetMapping(value = "/books", produces = APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(
+            value = "/books",
+            produces = APPLICATION_JSON_UTF8_VALUE
+    )
     public List<String[]> getBooks() throws IOException {
         final List<String[]> books = new ArrayList<>();
         final BufferedReader bufferedReader = new BufferedReader(
                 new InputStreamReader(
-                        resourceLoader.getResource("classpath:books.csv").getInputStream()
+                        resourceLoader.getResource("classpath:books.csv").getInputStream(),
+                        Charset.forName("utf-8")
                 )
         );
         while (bufferedReader.ready()) {
@@ -40,11 +44,16 @@ public class Library {
         return books;
     }
 
-    @PostMapping("/fee")
+    @PostMapping(value = "/fee", produces = APPLICATION_JSON_UTF8_VALUE)
     public List<String> calculateFee(@RequestBody List<String> rentalRequests) throws IOException {
         String customerName = rentalRequests.remove(0);
 
-        final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(resourceLoader.getResource("classpath:books.csv").getInputStream()));
+        final BufferedReader bufferedReader = new BufferedReader(
+                new InputStreamReader(
+                        resourceLoader.getResource("classpath:books.csv").getInputStream(),
+                        Charset.forName("utf-8")
+                )
+        );
         final List<String[]> books = new ArrayList<>();
         while (bufferedReader.ready()) {
             final String line = bufferedReader.readLine();
@@ -62,7 +71,7 @@ public class Library {
             double thisAmount = 0;
 
             int daysRented = Integer.parseInt(rental[1]);
-            String readingMode =  book[3];
+            String readingMode = book[3];
             switch (readingMode) {
                 case "IMAGE":
                     thisAmount += 2;

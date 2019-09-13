@@ -38,7 +38,8 @@ public class LibraryTest {
     public void testGetAllBooks() throws Exception {
         MvcResult result = mvc.perform(MockMvcRequestBuilders
                 .get("/api/library/books")
-                .accept(MediaType.APPLICATION_JSON_UTF8))
+                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                .accept(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -54,8 +55,8 @@ public class LibraryTest {
         MockHttpServletResponse response = mvc.perform(MockMvcRequestBuilders
                 .post("/api/library/fee")
                 .content("[\"hansmeier\", \"6 3\", \"8 4\", \"14 4\"]")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .accept(MediaType.APPLICATION_JSON_UTF8))
+                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                .accept(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn()

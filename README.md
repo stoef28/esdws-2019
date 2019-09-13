@@ -39,6 +39,7 @@ The project can be found on <a href="https://github.com/ozihler/esdws-2019">Gith
 9. Once both frontend and backend run, you can try the library yourself.¨
 10. For the course important are the backend tests. Go to backend/src/test, right-click on the folder and click "Run tests".
 11. If the tests are green, you are ready for the workshop.
+11.a) if gradle is used to compile and run the tests, go to File > Settings > Build, Execution, Deployment > Build Tools > Gradle, and under "Build and run", select IntelliJ for both "Build and run using: " and "Run tests using:" 
 ```
 
 And repeat
