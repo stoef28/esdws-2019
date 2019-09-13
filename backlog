@@ -1,0 +1,12 @@
+- User can rate course and add feedback for likes and improvements (similar to feedback in CC course)
+- User can write a public comment
+- Author can bundle courses and course sections into bundles
+- Author can bundle bundles, courses, and course sections of courses into new bundles
+- Author can associate bundles to projects
+- see todos
+- implement conversion to md -> pdf
+-- create pdf generator for authors to be able to select parts they want to have in the code
+-- provide inclusion of css file
+
+Technical:
+- RouteParameters class with strings for route parameters as constants (no magic strings)

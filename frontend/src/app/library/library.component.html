@@ -1,0 +1,75 @@
+<div>
+  <h3>Logged in User: <span style="color:red">{{loggedInUser}}</span></h3>
+</div>
+
+<p-confirmDialog
+  width="1024"
+  header="Your Fee"
+  icon="pi pi-info">
+
+</p-confirmDialog>
+
+<div class="ui-g">
+  <div class="ui-md-6 ui-g-nopad drag-column">
+    <ul style="margin:0;padding:0">
+      <li *ngFor="let book of availableBooks"
+          class="ui-helper-clearfix"
+          pDraggable="books"
+          (onDragStart)="dragStart($event,book)"
+          (onDragEnd)="dragEnd($event)">
+        <div>
+          <img
+            [src]="book.imageLink"
+            width="50px"
+            style="float:left"
+            draggable="false"/>
+          <span> {{book.title}}</span>
+          <span> {{book.authors}}</span>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div class="ui-md-6 drop-column" pDroppable="books"
+       (onDrop)="drop($event)"
+       [ngClass]="{'ui-highlight-car':draggedBook}">
+
+    <div>
+      <span><b>You selected the following books: </b></span>
+    </div>
+    <div
+      class="ui-g-1 ui-md-1">
+      <button pButton icon="pi pi-times-circle" (click)="resetSelectedBooksBasket()" [disabled]="selectedBooksBasket.length === 0"></button>
+    </div>
+    <div
+      class="ui-g-1 ui-md-1">
+      <button pButton icon="pi pi-save" (click)="calculateFee()" [disabled]="selectedBooksBasket.length === 0"></button>
+    </div>
+    <div
+      class="ui-g-12 ui-md-12">
+
+      <p-table
+        [value]="selectedBooksBasket">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Authors</th>
+            <th>Type</th>
+            <th>Days rented</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-book>
+          <tr>
+            <td>{{book.id}}</td>
+            <td>{{book.title}}</td>
+            <td>{{book.authors}}</td>
+            <td>{{book.type}}</td>
+            <td>{{book.numberOfDaysRented}}
+              <button pButton icon="pi pi-plus-circle" (click)="increaseDaysRentedOf(book)"></button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>

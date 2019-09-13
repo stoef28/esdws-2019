@@ -1,0 +1,2 @@
+rootProject.name = 'emerging-software-design-workshop'
+include 'frontend', 'backend'

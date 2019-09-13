@@ -1,0 +1,3 @@
+describe('Course user', () => {
+
+});
