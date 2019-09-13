@@ -26,6 +26,7 @@ todo: how to set it up on MAC and Linux
 My current IDE is IntelliJ v2019.2.2. You can download it here: <a href="https://www.jetbrains.com/idea/download/#section=windows">IntelliJ</a>. Make sure you download the <b>Ultimate Edition</b>.
  
 ### Installing
+Go to <a href="https://github.com/ozihler/esdws-2019">Github</a> and Clone the repository (https://github.com/ozihler/esdws-2019)
 ```
 
 ```
