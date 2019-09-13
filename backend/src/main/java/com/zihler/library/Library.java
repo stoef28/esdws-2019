@@ -18,7 +18,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 @RequestMapping("api/library")
 public class Library {
 
-    ResourceLoader resourceLoader;
+    private ResourceLoader resourceLoader;
 
     @Autowired
     public Library(ResourceLoader resourceLoader) {
@@ -47,7 +47,12 @@ public class Library {
 
     @PostMapping(value = "/fee", produces = APPLICATION_JSON_UTF8_VALUE)
     public List<String> calculateFee(@RequestBody List<String> rentalRequests) throws IOException {
+        if (rentalRequests == null || rentalRequests.size() == 0) {
+            throw new IllegalArgumentException("rental requests cannot be null!");
+        }
         String customerName = rentalRequests.remove(0);
+
+        Customer customer = new Customer(customerName);
 
         final BufferedReader bufferedReader = new BufferedReader(
                 new InputStreamReader(
@@ -64,7 +69,7 @@ public class Library {
 
         double totalAmount = 0;
         int frequentRenterPoints = 0;
-        String result = "Rental Record for " + customerName + "\n";
+        String result = "Rental Record for " + customer.getName() + "\n";
 
         for (int i = 0; i < rentalRequests.size(); i++) {
             final String[] rental = rentalRequests.get(i).split(" ");
