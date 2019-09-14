@@ -2,9 +2,10 @@ package com.zihler.library.framework;
 
 import com.zihler.library.gateways.BookRepository;
 import com.zihler.library.gateways.CustomerRepository;
-import com.zihler.library.presenters.StringRentalReceiptReceiptPresenter;
+import com.zihler.library.presenters.RestRentalRecordPresenter;
 import com.zihler.library.usecases.GatherBooksUseCaseInputPortAdapter;
 import com.zihler.library.usecases.RentBooksUseCaseInputPortAdapter;
+import com.zihler.library.usecases.RentalRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,12 +41,11 @@ public class Library {
             throw new IllegalArgumentException("rental requests cannot be null!");
         }
         String username = booksToRent.remove(0);
-
-        StringRentalReceiptReceiptPresenter stringRentalReceiptPresenter = new StringRentalReceiptReceiptPresenter();
-        RentBooksUseCaseInputPortAdapter rentBooks = new RentBooksUseCaseInputPortAdapter(customerRepository, bookRepository, stringRentalReceiptPresenter);
-        rentBooks.rent(booksToRent, username);
-        String receiptForView = stringRentalReceiptPresenter.formatRentalReceipt();
-        return List.of(receiptForView);
+        RestRentalRecordPresenter rentalReceiptPresenter = new RestRentalRecordPresenter();
+        RentBooksUseCaseInputPortAdapter rentBooks = new RentBooksUseCaseInputPortAdapter(customerRepository, bookRepository, rentalReceiptPresenter);
+        rentBooks.rent(new RentalRequest(booksToRent, username));
+        String viewModel = rentalReceiptPresenter.formatRentalReceiptForViewModel();
+        return List.of(viewModel);
     }
 }
 

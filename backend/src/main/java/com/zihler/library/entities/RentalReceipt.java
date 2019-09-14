@@ -11,7 +11,4 @@ public class RentalReceipt {
         return new RentalReceipt(rentalRecord);
     }
 
-    public RentalRecord getRentalRecord() {
-        return rentalRecord;
-    }
 }

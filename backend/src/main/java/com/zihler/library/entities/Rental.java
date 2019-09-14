@@ -9,10 +9,6 @@ public class Rental {
         this.daysRented = daysRented;
     }
 
-    public Book getBook() {
-        return book;
-    }
-
     public int getDaysRented() {
         return daysRented;
     }
@@ -53,6 +49,6 @@ public class Rental {
     }
 
     public String getBookAuthors() {
-        return getBook().getAuthors();
+        return book.getAuthors();
     }
 }
