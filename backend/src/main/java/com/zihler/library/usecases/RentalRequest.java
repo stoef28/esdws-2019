@@ -6,9 +6,13 @@ public class RentalRequest {
     private final List<String> booksToRent;
     private final String username;
 
-    public RentalRequest(List<String> booksToRent, String username) {
+    private RentalRequest(List<String> booksToRent, String username) {
         this.booksToRent = booksToRent;
         this.username = username;
+    }
+
+    public static RentalRequest from(List<String> booksToRent, String username) {
+        return new RentalRequest(booksToRent, username);
     }
 
     public List<String> getBooksToRent() {

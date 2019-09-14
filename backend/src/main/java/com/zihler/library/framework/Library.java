@@ -43,7 +43,7 @@ public class Library {
         String username = booksToRent.remove(0);
         RestRentalRecordPresenter rentalReceiptPresenter = new RestRentalRecordPresenter();
         RentBooksUseCaseInputPortAdapter rentBooks = new RentBooksUseCaseInputPortAdapter(customerRepository, bookRepository, rentalReceiptPresenter);
-        rentBooks.rent(new RentalRequest(booksToRent, username));
+        rentBooks.rent(RentalRequest.from(booksToRent, username));
         String viewModel = rentalReceiptPresenter.formatRentalReceiptForViewModel();
         return List.of(viewModel);
     }
