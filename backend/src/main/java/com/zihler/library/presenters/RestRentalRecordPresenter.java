@@ -1,8 +1,9 @@
 package com.zihler.library.presenters;
 
-import com.zihler.library.entities.Rental;
 import com.zihler.library.usecases.RentalRecordResponse;
 import com.zihler.library.usecases.RentalResponse;
+
+import java.util.List;
 
 public class RestRentalRecordPresenter implements RentalRecordPresenter {
     private RentalRecordResponse rentalRecordResponse;
@@ -12,11 +13,11 @@ public class RestRentalRecordPresenter implements RentalRecordPresenter {
         this.rentalRecordResponse = rentalRecordResponse;
     }
 
-    public String formatRentalReceiptForViewModel() {
+    public List<String> formatRentalReceiptForViewModel() {
         if (rentalRecordResponse == null) {
             throw new RuntimeException("Present has not been called yet.");
         }
-        return formatForViewModel();
+        return List.of(formatForViewModel());
     }
 
     private String formatForViewModel() {

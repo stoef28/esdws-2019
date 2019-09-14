@@ -3,10 +3,11 @@ package com.zihler.library.usecases;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class StringArrayBooksPresenter {
+public class StringArrayBooksPresenter implements BooksPresenter {
     private List<BookResponse> booksResponse;
 
-    void present(List<BookResponse> booksResponse) {
+    @Override
+    public void present(List<BookResponse> booksResponse) {
         this.booksResponse = booksResponse;
     }
 

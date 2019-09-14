@@ -2,6 +2,10 @@ package com.zihler.library.usecases;
 
 import com.zihler.library.entities.Book;
 
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
+
 public class BookResponse {
     private int key;
     private String authors;
@@ -19,6 +23,12 @@ public class BookResponse {
         bookResponse.key = book.getKey();
 
         return bookResponse;
+    }
+
+    static List<BookResponse> from(List<Book> books) {
+        return books.stream()
+                .map(BookResponse::from)
+                .collect(toList());
     }
 
     public int getKey() {

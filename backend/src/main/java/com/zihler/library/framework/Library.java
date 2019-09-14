@@ -30,9 +30,9 @@ public class Library {
             produces = APPLICATION_JSON_UTF8_VALUE
     )
     public List<String[]> getBooks() {
+        GatherBooksUseCaseInputPort gatherBooks = new GatherBooksUseCaseInputPortAdapter(bookRepository);
         StringArrayBooksPresenter presenter = new StringArrayBooksPresenter();
-        GatherBooksUseCaseInputPort gatherBooks = new GatherBooksUseCaseInputPortAdapter(bookRepository, presenter);
-        gatherBooks.gatherAll();
+        gatherBooks.gatherAllBooks(presenter);
         return presenter.formatBooksForViewModel();
     }
 
@@ -42,11 +42,11 @@ public class Library {
             throw new IllegalArgumentException("rental requests cannot be null!");
         }
         String username = booksToRent.remove(0);
-        RestRentalRecordPresenter rentalReceiptPresenter = new RestRentalRecordPresenter();
-        RentBooksUseCaseInputPort rentBooks = new RentBooksUseCaseInputPortAdapter(customerRepository, bookRepository, rentalReceiptPresenter);
-        rentBooks.rent(RentalRequest.from(booksToRent, username));
-        String viewModel = rentalReceiptPresenter.formatRentalReceiptForViewModel();
-        return List.of(viewModel);
+        RestRentalRecordPresenter presenter = new RestRentalRecordPresenter();
+        RentBooksUseCaseInputPort rentBooks = new RentBooksUseCaseInputPortAdapter(customerRepository, bookRepository, presenter);
+        RentalRequest rentals = RentalRequest.from(booksToRent, username);
+        rentBooks.rent(rentals);
+        return presenter.formatRentalReceiptForViewModel();
     }
 }
 

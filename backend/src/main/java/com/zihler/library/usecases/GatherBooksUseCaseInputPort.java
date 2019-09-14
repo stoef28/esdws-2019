@@ -1,5 +1,5 @@
 package com.zihler.library.usecases;
 
 public interface GatherBooksUseCaseInputPort {
-    void gatherAll();
+    void gatherAllBooks(BooksPresenter presenter);
 }
