@@ -4,20 +4,25 @@ import com.zihler.library.entities.Book;
 import com.zihler.library.gateways.BookRepository;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 public class GatherBooksUseCaseInputPortAdapter implements GatherBooksUseCaseInputPort {
     private BookRepository bookRepository;
+    private StringArrayBooksPresenter presenter;
 
-    public GatherBooksUseCaseInputPortAdapter(BookRepository bookRepository) {
+    public GatherBooksUseCaseInputPortAdapter(BookRepository bookRepository, StringArrayBooksPresenter presenter) {
         this.bookRepository = bookRepository;
+        this.presenter = presenter;
     }
 
     @Override
-    public List<String[]> getBooks() {
-        return bookRepository.getAll()
+    public void gatherAll() {
+        List<BookResponse> booksResponse = bookRepository.getAll()
                 .stream()
-                .map(Book::toStringArray)
-                .collect(Collectors.toList());
+                .map(BookResponse::from)
+                .collect(toList());
+
+        presenter.present(booksResponse);
     }
 }

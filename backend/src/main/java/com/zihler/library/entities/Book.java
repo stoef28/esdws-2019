@@ -45,14 +45,4 @@ public class Book {
     public String getLink() {
         return link;
     }
-
-    public String[] toStringArray() {
-        return new String[]{
-                getKey() + "",
-                getTitle(),
-                getAuthors(),
-                getReadingMode(),
-                getLink()
-        };
-    }
 }

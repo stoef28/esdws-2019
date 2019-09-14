@@ -3,9 +3,7 @@ package com.zihler.library.framework;
 import com.zihler.library.gateways.BookRepository;
 import com.zihler.library.gateways.CustomerRepository;
 import com.zihler.library.presenters.RestRentalRecordPresenter;
-import com.zihler.library.usecases.GatherBooksUseCaseInputPortAdapter;
-import com.zihler.library.usecases.RentBooksUseCaseInputPortAdapter;
-import com.zihler.library.usecases.RentalRequest;
+import com.zihler.library.usecases.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +30,10 @@ public class Library {
             produces = APPLICATION_JSON_UTF8_VALUE
     )
     public List<String[]> getBooks() {
-        return new GatherBooksUseCaseInputPortAdapter(bookRepository).getBooks();
+        StringArrayBooksPresenter presenter = new StringArrayBooksPresenter();
+        GatherBooksUseCaseInputPort gatherBooks = new GatherBooksUseCaseInputPortAdapter(bookRepository, presenter);
+        gatherBooks.gatherAll();
+        return presenter.formatBooksForViewModel();
     }
 
     @PostMapping(value = "/fee", produces = APPLICATION_JSON_UTF8_VALUE)
@@ -42,7 +43,7 @@ public class Library {
         }
         String username = booksToRent.remove(0);
         RestRentalRecordPresenter rentalReceiptPresenter = new RestRentalRecordPresenter();
-        RentBooksUseCaseInputPortAdapter rentBooks = new RentBooksUseCaseInputPortAdapter(customerRepository, bookRepository, rentalReceiptPresenter);
+        RentBooksUseCaseInputPort rentBooks = new RentBooksUseCaseInputPortAdapter(customerRepository, bookRepository, rentalReceiptPresenter);
         rentBooks.rent(RentalRequest.from(booksToRent, username));
         String viewModel = rentalReceiptPresenter.formatRentalReceiptForViewModel();
         return List.of(viewModel);
