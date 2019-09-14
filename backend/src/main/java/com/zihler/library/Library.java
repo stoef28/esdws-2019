@@ -17,12 +17,13 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 @RestController
 @RequestMapping("api/library")
 public class Library {
-
+    private InMemoryCustomerRepository customerRepository;
     private ResourceLoader resourceLoader;
 
     @Autowired
     public Library(ResourceLoader resourceLoader) {
         this.resourceLoader = resourceLoader;
+        this.customerRepository = new InMemoryCustomerRepository();
     }
 
     @GetMapping(
@@ -52,7 +53,7 @@ public class Library {
         }
         String customerName = rentalRequests.remove(0);
 
-        Customer customer = new Customer(customerName);
+        Customer customer = customerRepository.findByUsername(customerName);
 
         final BufferedReader bufferedReader = new BufferedReader(
                 new InputStreamReader(
