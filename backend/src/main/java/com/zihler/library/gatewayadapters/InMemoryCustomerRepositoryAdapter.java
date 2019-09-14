@@ -13,6 +13,4 @@ public class InMemoryCustomerRepositoryAdapter implements CustomerRepository {
     public Customer findByUsername(String username) {
         return inMemoryCustomerRepository.findByUsername(username);
     }
-
-
 }
