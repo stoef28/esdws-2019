@@ -1,4 +1,4 @@
-package com.zihler.library;
+package com.zihler.library.entities;
 
 public class Customer {
     private String name;

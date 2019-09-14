@@ -1,10 +1,11 @@
 package com.zihler.library;
 
+import com.zihler.library.framework.Library;
+import com.zihler.library.gatewayadapters.InMemoryCustomerRepositoryAdapter;
+import com.zihler.library.gatewayadapters.FileBasedInMemoryBookRepositoryAdapter;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.http.MediaType;
@@ -28,7 +29,7 @@ public class LibraryTest {
     public void setup() {
         DefaultResourceLoader resourceLoader = new DefaultResourceLoader();
 
-        library = new Library(resourceLoader);
+        library = new Library(new FileBasedInMemoryBookRepositoryAdapter(resourceLoader), new InMemoryCustomerRepositoryAdapter());
         mvc = MockMvcBuilders.standaloneSetup(library)
                 .build();
     }
