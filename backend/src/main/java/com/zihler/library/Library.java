@@ -51,15 +51,13 @@ public class Library {
         Customer customer = customerRepository.findByUsername(customerName);
 
         List<Rental> rentals = rentalFactory.createRentalsFrom(rentalRequests);
-        double totalAmount = getTotalAmount(rentals);
-        int frequentRenterPoints = getFrequentRenterPoints(rentals);
+        RentalRecord rentalRecord = new RentalRecord(customer, rentals);
 
-        String result = "Rental Record for " + customer.getName() + "\n";
+        String result = "Rental Record for " + rentalRecord.getCustomerName() + "\n";
         result += formatRentals(rentals);
-
         // add footer lines
-        result += "You owe " + totalAmount + " $\n";
-        result += "You earned " + frequentRenterPoints + " frequent renter points\n";
+        result += "You owe " + rentalRecord.getTotalAmount() + " $\n";
+        result += "You earned " + rentalRecord.getFrequentRenterPoints() + " frequent renter points\n";
 
         return List.of(result);
     }
@@ -71,23 +69,6 @@ public class Library {
             result += "\t'" + rental.getBookTitle() + "' by '" + rental.getBookAuthors() + "' for " + rental.getDaysRented() + " days: \t" + rental.getAmount() + " $\n";
         }
         return result;
-    }
-
-    private int getFrequentRenterPoints(List<Rental> rentals) {
-        int frequentRenterPoints = 0;
-        for (Rental rental : rentals) {
-            // add frequent renter points
-            frequentRenterPoints += rental.getFrequentRenterPoints();
-        }
-        return frequentRenterPoints;
-    }
-
-    private double getTotalAmount(List<Rental> rentals) {
-        double totalAmount = 0;
-        for (Rental rental : rentals) {
-            totalAmount += rental.getAmount();
-        }
-        return totalAmount;
     }
 
 }
