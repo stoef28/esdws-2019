@@ -1,23 +1,24 @@
 package com.zihler.library;
 
+import java.util.ArrayList;
 import java.util.List;
 
 class StringRentalRecordPresenter {
     private List<String> rentalsResponse;
 
-    void present(RentalRecord rentalRecord) {
-        String formattedRentals = "Rental Record for " + rentalRecord.getCustomerName() + "\n";
-        formattedRentals += formatRentals(rentalRecord.getRentals());
+    void present(RentalsResponse rentalsResponse) {
+        String formattedRentals = "Rental Record for " + rentalsResponse.getCustomerName() + "\n";
+        formattedRentals += formatRentals(rentalsResponse.getRentals());
         // add footer lines
-        formattedRentals += "You owe " + rentalRecord.getTotalAmount() + " $\n";
-        formattedRentals += "You earned " + rentalRecord.getFrequentRenterPoints() + " frequent renter points\n";
+        formattedRentals += "You owe " + rentalsResponse.getTotalAmount() + " $\n";
+        formattedRentals += "You earned " + rentalsResponse.getFrequentRenterPoints() + " frequent renter points\n";
 
         this.rentalsResponse = List.of(formattedRentals);
     }
 
-    private String formatRentals(List<Rental> rentals) {
+    private String formatRentals(List<RentalResponse> rentalResponses) {
         String result = "";
-        for (Rental rental : rentals) {
+        for (RentalResponse rental : rentalResponses) {
             // create figures for this rental
             result += "\t'" + rental.getBookTitle() + "' by '" + rental.getBookAuthors() + "' for " + rental.getDaysRented() + " days: \t" + rental.getAmount() + " $\n";
         }

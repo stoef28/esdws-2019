@@ -51,7 +51,8 @@ public class Library {
 
         RentBooksInteractor rentBooksInteractor = new RentBooksInteractor(customerRepository, rentalFactory, stringRentalRecordPresenter);
 
-        rentBooksInteractor.rent(customerName, rentalRequests);
+        RentalsRequest rentalsRequest = new RentalsRequest(customerName, rentalRequests);
+        rentBooksInteractor.rent(rentalsRequest);
 
         return stringRentalRecordPresenter.getRentalsResponse();
     }

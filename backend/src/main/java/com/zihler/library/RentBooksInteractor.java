@@ -13,10 +13,11 @@ class RentBooksInteractor {
         this.rentalRecordPresenter = rentalRecordPresenter;
     }
 
-    void rent(String customerName, List<String> rentalRequests) {
-        Customer customer = customerRepository.findByUsername(customerName);
-        List<Rental> rentals = rentalFactory.createRentalsFrom(rentalRequests);
+    void rent(RentalsRequest rentalsRequest) {
+        Customer customer = customerRepository.findByUsername(rentalsRequest.getCustomerName());
+        List<Rental> rentals = rentalFactory.createRentalsFrom(rentalsRequest.getRentalRequests());
         RentalRecord rentalRecord = new RentalRecord(customer, rentals);
-        rentalRecordPresenter.present(rentalRecord);
+        RentalsResponse rentalsResponse = new RentalsResponse(rentalRecord);
+        rentalRecordPresenter.present(rentalsResponse);
     }
 }
