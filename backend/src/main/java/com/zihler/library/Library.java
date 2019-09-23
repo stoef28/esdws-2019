@@ -71,38 +71,19 @@ public class Library {
         String result = "Rental Record for " + customer.getName() + "\n";
 
         for (int i = 0; i < rentalRequests.size(); i++) {
-            final String[] rental = rentalRequests.get(i).split(" ");
-            final Book book = books.get(Integer.parseInt(rental[0]));
-            double thisAmount = 0;
+            final String[] rentalData = rentalRequests.get(i).split(" ");
+            Rental rental = new Rental(
+                    books.get(Integer.parseInt(rentalData[0])),
+                    Integer.parseInt(rentalData[1])
+            );
 
-            int daysRented = Integer.parseInt(rental[1]);
-            String readingMode = book.getReadingMode();
-            switch (readingMode) {
-                case "IMAGE":
-                    thisAmount += 2;
-                    if (daysRented > 2)
-                        thisAmount += (daysRented - 2) * 1.5;
-                    break;
-                case "TEXT":
-                    thisAmount += 1.5;
-                    if (daysRented > 3)
-                        thisAmount += (daysRented - 3) * 1.5;
-                    break;
-                case "BOTH":
-                    thisAmount += daysRented * 3;
-                    break;
-            }
+            double thisAmount = rental.getAmount();
 
             // add frequent renter points
-            frequentRenterPoints++;
-
-            // add bonus for a reading mode "both"
-            if (readingMode.equals("BOTH") && daysRented > 1) {
-                frequentRenterPoints++;
-            }
+            frequentRenterPoints += rental.getFrequentRenterPoints();
 
             // create figures for this rental
-            result += "\t'" + book.getTitle() + "' by '" + book.getAuthors() + "' for " + daysRented + " days: \t" + thisAmount + " $\n";
+            result += "\t'" + rental.getBookTitle() + "' by '" + rental.getBookAuthors() + "' for " + rental.getDaysRented() + " days: \t" + thisAmount + " $\n";
             totalAmount += thisAmount;
         }
 
