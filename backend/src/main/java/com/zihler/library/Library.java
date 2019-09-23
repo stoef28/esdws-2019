@@ -14,14 +14,14 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 @RestController
 @RequestMapping("api/library")
 public class Library {
-    private final FileBasedInMemoryBookRepository bookRepository;
+    private final FileBasedBookRepository bookRepository;
     private final RentalFactory rentalFactory;
     private InMemoryCustomerRepository customerRepository;
 
     @Autowired
     public Library(ResourceLoader resourceLoader) throws IOException {
         this.customerRepository = new InMemoryCustomerRepository();
-        this.bookRepository = new FileBasedInMemoryBookRepository(resourceLoader);
+        this.bookRepository = new FileBasedBookRepository(resourceLoader);
         rentalFactory = new RentalFactory(bookRepository);
     }
 

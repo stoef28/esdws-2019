@@ -9,10 +9,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-class FileBasedInMemoryBookRepository {
+class FileBasedBookRepository {
     private final List<Book> books;
 
-    FileBasedInMemoryBookRepository(ResourceLoader resourceLoader) throws IOException {
+    FileBasedBookRepository(ResourceLoader resourceLoader) throws IOException {
         this.books = loadBooks(resourceLoader);
     }
 

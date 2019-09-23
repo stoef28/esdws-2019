@@ -1,14 +1,12 @@
 package com.zihler.library;
 
-import org.springframework.web.bind.annotation.RequestBody;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class RentalFactory {
-    private FileBasedInMemoryBookRepository bookRepository;
+    private FileBasedBookRepository bookRepository;
 
-    public RentalFactory(FileBasedInMemoryBookRepository bookRepository) {
+    public RentalFactory(FileBasedBookRepository bookRepository) {
         this.bookRepository = bookRepository;
     }
 
