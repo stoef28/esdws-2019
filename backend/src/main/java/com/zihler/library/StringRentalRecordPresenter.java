@@ -2,7 +2,7 @@ package com.zihler.library;
 
 import java.util.List;
 
-class RentalRecordPresenter {
+class StringRentalRecordPresenter {
     private List<String> rentalsResponse;
 
     void present(RentalRecord rentalRecord) {

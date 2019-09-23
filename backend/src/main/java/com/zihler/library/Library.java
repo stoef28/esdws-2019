@@ -47,15 +47,13 @@ public class Library {
             throw new IllegalArgumentException("rental requests cannot be null!");
         }
         String customerName = rentalRequests.remove(0);
+        StringRentalRecordPresenter stringRentalRecordPresenter = new StringRentalRecordPresenter();
 
-        Customer customer = customerRepository.findByUsername(customerName);
+        RentBooksInteractor rentBooksInteractor = new RentBooksInteractor(customerRepository, rentalFactory, stringRentalRecordPresenter);
 
-        List<Rental> rentals = rentalFactory.createRentalsFrom(rentalRequests);
-        RentalRecord rentalRecord = new RentalRecord(customer, rentals);
+        rentBooksInteractor.rent(customerName, rentalRequests);
 
-        RentalRecordPresenter rentalRecordPresenter = new RentalRecordPresenter();
-        rentalRecordPresenter.present(rentalRecord);
-        return rentalRecordPresenter.getRentalsResponse();
+        return stringRentalRecordPresenter.getRentalsResponse();
     }
 
 }
