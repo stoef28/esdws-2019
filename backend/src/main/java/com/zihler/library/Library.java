@@ -8,6 +8,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 
@@ -15,37 +16,33 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 @RestController
 @RequestMapping("api/library")
 public class Library {
+    private final FileBasedInMemoryBookRepository bookRepository;
     private InMemoryCustomerRepository customerRepository;
-    private ResourceLoader resourceLoader;
 
     @Autowired
-    public Library(ResourceLoader resourceLoader) {
-        this.resourceLoader = resourceLoader;
+    public Library(ResourceLoader resourceLoader) throws IOException {
         this.customerRepository = new InMemoryCustomerRepository();
+        this.bookRepository = new FileBasedInMemoryBookRepository(resourceLoader);
     }
 
     @GetMapping(
             value = "/books",
             produces = APPLICATION_JSON_UTF8_VALUE
     )
-    public List<String[]> getBooks() throws IOException {
-        final List<String[]> books = new ArrayList<>();
-        final BufferedReader bufferedReader = new BufferedReader(
-                new InputStreamReader(
-                        resourceLoader.getResource("classpath:books.csv").getInputStream(),
-                        StandardCharsets.UTF_8
-                )
-        );
-        while (bufferedReader.ready()) {
-            final String line = bufferedReader.readLine();
-            final String[] book = line.split(";");
-            books.add(book);
-        }
-        return books;
+    public List<String[]> getBooks() {
+        return bookRepository.getAll().stream()
+                .map(book -> new String[]{
+                        book.getKey() + "",
+                        book.getTitle(),
+                        book.getAuthors(),
+                        book.getReadingMode(),
+                        book.getLink()
+                })
+                .collect(Collectors.toList());
     }
 
     @PostMapping(value = "/fee", produces = APPLICATION_JSON_UTF8_VALUE)
-    public List<String> calculateFee(@RequestBody List<String> rentalRequests) throws IOException {
+    public List<String> calculateFee(@RequestBody List<String> rentalRequests) {
         if (rentalRequests == null || rentalRequests.size() == 0) {
             throw new IllegalArgumentException("rental requests cannot be null!");
         }
@@ -53,27 +50,15 @@ public class Library {
 
         Customer customer = customerRepository.findByUsername(customerName);
 
-        final BufferedReader bufferedReader = new BufferedReader(
-                new InputStreamReader(
-                        resourceLoader.getResource("classpath:books.csv").getInputStream(),
-                        StandardCharsets.UTF_8
-                )
-        );
-        final List<Book> books = new ArrayList<>();
-        while (bufferedReader.ready()) {
-            String line = bufferedReader.readLine();
-            Book book = Book.from(line);
-            books.add(book);
-        }
-
         double totalAmount = 0;
         int frequentRenterPoints = 0;
         String result = "Rental Record for " + customer.getName() + "\n";
 
         for (int i = 0; i < rentalRequests.size(); i++) {
             final String[] rentalData = rentalRequests.get(i).split(" ");
+            int bookKey = Integer.parseInt(rentalData[0]);
             Rental rental = new Rental(
-                    books.get(Integer.parseInt(rentalData[0])),
+                    bookRepository.getByKey(bookKey),
                     Integer.parseInt(rentalData[1])
             );
 
