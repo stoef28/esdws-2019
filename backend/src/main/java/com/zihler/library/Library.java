@@ -5,8 +5,6 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,12 +15,14 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 @RequestMapping("api/library")
 public class Library {
     private final FileBasedInMemoryBookRepository bookRepository;
+    private final RentalFactory rentalFactory;
     private InMemoryCustomerRepository customerRepository;
 
     @Autowired
     public Library(ResourceLoader resourceLoader) throws IOException {
         this.customerRepository = new InMemoryCustomerRepository();
         this.bookRepository = new FileBasedInMemoryBookRepository(resourceLoader);
+        rentalFactory = new RentalFactory(bookRepository);
     }
 
     @GetMapping(
@@ -55,12 +55,8 @@ public class Library {
         String result = "Rental Record for " + customer.getName() + "\n";
 
         for (int i = 0; i < rentalRequests.size(); i++) {
-            final String[] rentalData = rentalRequests.get(i).split(" ");
-            int bookKey = Integer.parseInt(rentalData[0]);
-            Rental rental = new Rental(
-                    bookRepository.getByKey(bookKey),
-                    Integer.parseInt(rentalData[1])
-            );
+            String nextRequest = rentalRequests.get(i);
+            Rental rental = rentalFactory.createRentalFrom(nextRequest);
 
             double thisAmount = rental.getAmount();
 
