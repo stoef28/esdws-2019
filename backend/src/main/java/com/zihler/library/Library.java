@@ -50,29 +50,44 @@ public class Library {
 
         Customer customer = customerRepository.findByUsername(customerName);
 
-        double totalAmount = 0;
-        int frequentRenterPoints = 0;
+        List<Rental> rentals = rentalFactory.createRentalsFrom(rentalRequests);
+        double totalAmount = getTotalAmount(rentals);
+        int frequentRenterPoints = getFrequentRenterPoints(rentals);
+
         String result = "Rental Record for " + customer.getName() + "\n";
-
-        for (int i = 0; i < rentalRequests.size(); i++) {
-            String nextRequest = rentalRequests.get(i);
-            Rental rental = rentalFactory.createRentalFrom(nextRequest);
-
-            double thisAmount = rental.getAmount();
-
-            // add frequent renter points
-            frequentRenterPoints += rental.getFrequentRenterPoints();
-
-            // create figures for this rental
-            result += "\t'" + rental.getBookTitle() + "' by '" + rental.getBookAuthors() + "' for " + rental.getDaysRented() + " days: \t" + thisAmount + " $\n";
-            totalAmount += thisAmount;
-        }
+        result += formatRentals(rentals);
 
         // add footer lines
         result += "You owe " + totalAmount + " $\n";
         result += "You earned " + frequentRenterPoints + " frequent renter points\n";
 
         return List.of(result);
+    }
+
+    private String formatRentals(List<Rental> rentals) {
+        String result = "";
+        for (Rental rental : rentals) {
+            // create figures for this rental
+            result += "\t'" + rental.getBookTitle() + "' by '" + rental.getBookAuthors() + "' for " + rental.getDaysRented() + " days: \t" + rental.getAmount() + " $\n";
+        }
+        return result;
+    }
+
+    private int getFrequentRenterPoints(List<Rental> rentals) {
+        int frequentRenterPoints = 0;
+        for (Rental rental : rentals) {
+            // add frequent renter points
+            frequentRenterPoints += rental.getFrequentRenterPoints();
+        }
+        return frequentRenterPoints;
+    }
+
+    private double getTotalAmount(List<Rental> rentals) {
+        double totalAmount = 0;
+        for (Rental rental : rentals) {
+            totalAmount += rental.getAmount();
+        }
+        return totalAmount;
     }
 
 }
