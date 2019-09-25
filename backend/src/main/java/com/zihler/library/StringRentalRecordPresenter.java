@@ -3,10 +3,11 @@ package com.zihler.library;
 import java.util.ArrayList;
 import java.util.List;
 
-class StringRentalRecordPresenter {
+class StringRentalRecordPresenter implements RentalRecordPresenter {
     private List<String> rentalsResponse;
 
-    void present(RentalsResponse rentalsResponse) {
+    @Override
+    public void present(RentalsResponse rentalsResponse) {
         String formattedRentals = "Rental Record for " + rentalsResponse.getCustomerName() + "\n";
         formattedRentals += formatRentals(rentalsResponse.getRentals());
         // add footer lines

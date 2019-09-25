@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RentalFactory {
-    private FileBasedBookRepository bookRepository;
+    private BookRepository bookRepository;
 
-    public RentalFactory(FileBasedBookRepository bookRepository) {
+    public RentalFactory(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
     }
 

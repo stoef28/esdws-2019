@@ -9,14 +9,15 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-class FileBasedBookRepository {
+class FileBasedBookRepository implements BookRepository {
     private final List<Book> books;
 
     FileBasedBookRepository(ResourceLoader resourceLoader) throws IOException {
         this.books = loadBooks(resourceLoader);
     }
 
-    List<Book> getAll() {
+    @Override
+    public List<Book> getAll() {
         return books;
     }
 
@@ -36,7 +37,8 @@ class FileBasedBookRepository {
         return books;
     }
 
-    Book getByKey(int bookKey) {
+    @Override
+    public Book getByKey(int bookKey) {
         return this.books.get(bookKey);
     }
 }

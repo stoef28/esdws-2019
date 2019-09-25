@@ -14,9 +14,9 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 @RestController
 @RequestMapping("api/library")
 public class Library {
-    private final FileBasedBookRepository bookRepository;
+    private final BookRepository bookRepository;
     private final RentalFactory rentalFactory;
-    private InMemoryCustomerRepository customerRepository;
+    private CustomerRepository customerRepository;
 
     @Autowired
     public Library(ResourceLoader resourceLoader) throws IOException {
@@ -49,10 +49,10 @@ public class Library {
         String customerName = rentalRequests.remove(0);
         StringRentalRecordPresenter stringRentalRecordPresenter = new StringRentalRecordPresenter();
 
-        RentBooksInteractor rentBooksInteractor = new RentBooksInteractor(customerRepository, rentalFactory, stringRentalRecordPresenter);
+        RentBooks rentBooks = new RentBooksInteractor(customerRepository, rentalFactory, stringRentalRecordPresenter);
 
         RentalsRequest rentalsRequest = new RentalsRequest(customerName, rentalRequests);
-        rentBooksInteractor.rent(rentalsRequest);
+        rentBooks.rent(rentalsRequest);
 
         return stringRentalRecordPresenter.getRentalsResponse();
     }
