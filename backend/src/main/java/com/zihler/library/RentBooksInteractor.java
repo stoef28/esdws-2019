@@ -7,10 +7,9 @@ class RentBooksInteractor implements RentBooks {
     private final RentalFactory rentalFactory;
     private RentalRecordPresenter rentalRecordPresenter;
 
-    RentBooksInteractor(CustomerRepository customerRepository, RentalFactory rentalFactory, RentalRecordPresenter rentalRecordPresenter) {
+    RentBooksInteractor(CustomerRepository customerRepository, RentalFactory rentalFactory) {
         this.customerRepository = customerRepository;
         this.rentalFactory = rentalFactory;
-        this.rentalRecordPresenter = rentalRecordPresenter;
     }
 
     @Override
@@ -20,5 +19,10 @@ class RentBooksInteractor implements RentBooks {
         RentalRecord rentalRecord = new RentalRecord(customer, rentals);
         RentalsResponse rentalsResponse = new RentalsResponse(rentalRecord);
         rentalRecordPresenter.present(rentalsResponse);
+    }
+
+    @Override
+    public void setRentalRecordPresenter(RentalRecordPresenter rentalRecordPresenter) {
+        this.rentalRecordPresenter = rentalRecordPresenter;
     }
 }

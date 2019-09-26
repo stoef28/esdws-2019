@@ -49,9 +49,10 @@ public class Library {
         String customerName = rentalRequests.remove(0);
         StringRentalRecordPresenter stringRentalRecordPresenter = new StringRentalRecordPresenter();
 
-        RentBooks rentBooks = new RentBooksInteractor(customerRepository, rentalFactory, stringRentalRecordPresenter);
-
+        RentBooks rentBooks = new RentBooksInteractor(customerRepository, rentalFactory);
+        rentBooks.setRentalRecordPresenter(stringRentalRecordPresenter);
         RentalsRequest rentalsRequest = new RentalsRequest(customerName, rentalRequests);
+
         rentBooks.rent(rentalsRequest);
 
         return stringRentalRecordPresenter.getRentalsResponse();
