@@ -42,6 +42,6 @@ public class FileBasedBookRepository implements BookRepository {
 
     @Override
     public Book getByKey(BookKey bookKey) {
-        return this.books.get(bookKey.get());
+        return this.books.get(bookKey.toInt());
     }
 }

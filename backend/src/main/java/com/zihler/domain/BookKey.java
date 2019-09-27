@@ -11,7 +11,7 @@ public class BookKey {
         return new BookKey(bookKey);
     }
 
-    public int get() {
+    public int toInt() {
         return bookKey;
     }
 }

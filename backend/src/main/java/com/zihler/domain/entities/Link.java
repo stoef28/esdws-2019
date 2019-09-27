@@ -11,4 +11,9 @@ public class Link {
     public static Link from(String link) {
         return new Link(link);
     }
+
+    @Override
+    public String toString() {
+        return link;
+    }
 }

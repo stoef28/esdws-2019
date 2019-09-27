@@ -11,4 +11,9 @@ public class Authors {
     public static Authors from(String authors) {
         return new Authors(authors);
     }
+
+    @Override
+    public String toString() {
+        return authors;
+    }
 }

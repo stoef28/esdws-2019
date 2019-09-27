@@ -28,22 +28,22 @@ public class Book {
     }
 
     public int getKey() {
-        return key;
+        return key.toInt();
     }
 
     public String getTitle() {
-        return title;
+        return title.toString();
     }
 
     public String getAuthors() {
-        return authors;
+        return authors.toString();
     }
 
     public String getReadingMode() {
-        return readingMode;
+        return readingMode.toString();
     }
 
     public String getLink() {
-        return link;
+        return link.toString();
     }
 }

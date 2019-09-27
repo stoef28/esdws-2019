@@ -11,4 +11,9 @@ public class Title {
     public static Title from(String title) {
         return new Title(title);
     }
+
+    @Override
+    public String toString() {
+        return title;
+    }
 }
