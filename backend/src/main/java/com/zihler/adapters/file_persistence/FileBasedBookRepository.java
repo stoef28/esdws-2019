@@ -34,7 +34,7 @@ public class FileBasedBookRepository implements BookRepository {
         final List<Book> books = new ArrayList<>();
         while (bufferedReader.ready()) {
             String line = bufferedReader.readLine();
-            Book book = Book.from(line);
+            Book book = Book.from(line.split(";"));
             books.add(book);
         }
         return books;

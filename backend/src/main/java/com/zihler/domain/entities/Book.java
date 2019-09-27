@@ -1,23 +1,30 @@
 package com.zihler.domain.entities;
 
-public class Book {
-    private final int key;
-    private final String title;
-    private final String authors;
-    private final String readingMode;
-    private final String link;
+import com.zihler.domain.BookKey;
 
-    private Book(int key, String title, String authors, String readingMode, String link) {
-        this.key = key;
+public class Book {
+    private final BookKey key;
+    private final Title title;
+    private final Authors authors;
+    private final ReadingMode readingMode;
+    private final Link link;
+
+    private Book(BookKey bookKey, Title title, Authors authors, ReadingMode readingMode, Link link) {
+        this.key = bookKey;
         this.title = title;
         this.authors = authors;
         this.readingMode = readingMode;
         this.link = link;
     }
 
-    public static Book from(String line) {
-        final String[] bookData = line.split(";");
-        return new Book(Integer.parseInt(bookData[0]), bookData[1], bookData[2], bookData[3], bookData[4]);
+    public static Book from(String[] bookData) {
+        return new Book(
+                BookKey.from(Integer.parseInt(bookData[0])),
+                Title.from(bookData[1]),
+                Authors.from(bookData[2]),
+                ReadingMode.valueOf(bookData[3]),
+                Link.from(bookData[4])
+        );
     }
 
     public int getKey() {
