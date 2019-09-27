@@ -1,10 +1,9 @@
 package com.zihler.library;
 
+import com.zihler.adapters.rest.LibraryResource;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.http.MediaType;
@@ -23,15 +22,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(MockitoJUnitRunner.class)
 public class LibraryTest {
     private MockMvc mvc;
-    private Library library;
+    private LibraryResource libraryResource;
 
 
     @Before
     public void setup() throws IOException {
         DefaultResourceLoader resourceLoader = new DefaultResourceLoader();
 
-        library = new Library(resourceLoader);
-        mvc = MockMvcBuilders.standaloneSetup(library)
+        libraryResource = new LibraryResource(resourceLoader);
+        mvc = MockMvcBuilders.standaloneSetup(libraryResource)
                 .build();
     }
 

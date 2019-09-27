@@ -1,14 +1,20 @@
-package com.zihler.library;
+package com.zihler.domain;
+
+import com.zihler.domain.entities.Customer;
 
 import java.util.List;
 
-class RentalRecord {
+public class RentalRecord {
     private final Customer customer;
     private final List<Rental> rentals;
 
-    RentalRecord(Customer customer, List<Rental> rentals) {
+    private RentalRecord(Customer customer, List<Rental> rentals) {
         this.customer = customer;
         this.rentals = rentals;
+    }
+
+    public static RentalRecord from(Customer customer, List<Rental> rentals) {
+        return new RentalRecord(customer, rentals);
     }
 
     double getTotalAmount() {
@@ -29,10 +35,14 @@ class RentalRecord {
     }
 
     String getCustomerName() {
-        return customer.getName();
+        return customer.getCustomerName().get();
     }
 
     public List<Rental> getRentals() {
         return rentals;
+    }
+
+    public RentalsDocument asDocument() {
+        return new RentalsDocument(this);
     }
 }

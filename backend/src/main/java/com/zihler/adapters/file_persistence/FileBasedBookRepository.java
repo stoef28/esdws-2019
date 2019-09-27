@@ -1,5 +1,8 @@
-package com.zihler.library;
+package com.zihler.adapters.file_persistence;
 
+import com.zihler.application.outbound_ports.persistence.BookRepository;
+import com.zihler.domain.BookKey;
+import com.zihler.domain.entities.Book;
 import org.springframework.core.io.ResourceLoader;
 
 import java.io.BufferedReader;
@@ -9,10 +12,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-class FileBasedBookRepository implements BookRepository {
+public class FileBasedBookRepository implements BookRepository {
     private final List<Book> books;
 
-    FileBasedBookRepository(ResourceLoader resourceLoader) throws IOException {
+    public FileBasedBookRepository(ResourceLoader resourceLoader) throws IOException {
         this.books = loadBooks(resourceLoader);
     }
 
@@ -38,7 +41,7 @@ class FileBasedBookRepository implements BookRepository {
     }
 
     @Override
-    public Book getByKey(int bookKey) {
-        return this.books.get(bookKey);
+    public Book getByKey(BookKey bookKey) {
+        return this.books.get(bookKey.get());
     }
 }

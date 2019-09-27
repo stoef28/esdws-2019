@@ -1,31 +1,31 @@
-package com.zihler.library;
+package com.zihler.domain;
 
-class RentalResponse {
+public class RentalDocument {
     private String bookTitle;
     private String bookAuthors;
     private int daysRented;
     private double amount;
 
-    RentalResponse(String bookTitle, String bookAuthors, int daysRented, double amount) {
+    RentalDocument(String bookTitle, String bookAuthors, int daysRented, double amount) {
         this.bookTitle = bookTitle;
         this.bookAuthors = bookAuthors;
         this.daysRented = daysRented;
         this.amount = amount;
     }
 
-    String getBookTitle() {
+    public String getBookTitle() {
         return this.bookTitle;
     }
 
-    String getBookAuthors() {
+    public String getBookAuthors() {
         return bookAuthors;
     }
 
-    int getDaysRented() {
+    public int getDaysRented() {
         return this.daysRented;
     }
 
-    double getAmount() {
+    public double getAmount() {
         return amount;
     }
 }

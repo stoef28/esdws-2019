@@ -1,13 +1,18 @@
-package com.zihler.library;
+package com.zihler.adapters.rest;
 
-import java.util.ArrayList;
+import com.zihler.application.outbound_ports.presentation.RentalRecordPresenter;
+import com.zihler.domain.RentalDocument;
+import com.zihler.domain.RentalsDocument;
+import com.zihler.library.RentalResponse;
+import com.zihler.library.RentalsResponse;
+
 import java.util.List;
 
-class StringRentalRecordPresenter implements RentalRecordPresenter {
+class RentalRecordRestPresenter implements RentalRecordPresenter {
     private List<String> rentalsResponse;
 
     @Override
-    public void present(RentalsResponse rentalsResponse) {
+    public void present(RentalsDocument rentalsResponse) {
         String formattedRentals = "Rental Record for " + rentalsResponse.getCustomerName() + "\n";
         formattedRentals += formatRentals(rentalsResponse.getRentals());
         // add footer lines
@@ -17,16 +22,16 @@ class StringRentalRecordPresenter implements RentalRecordPresenter {
         this.rentalsResponse = List.of(formattedRentals);
     }
 
-    private String formatRentals(List<RentalResponse> rentalResponses) {
+    private String formatRentals(List<RentalDocument> rentalResponses) {
         String result = "";
-        for (RentalResponse rental : rentalResponses) {
+        for (RentalDocument rental : rentalResponses) {
             // create figures for this rental
             result += "\t'" + rental.getBookTitle() + "' by '" + rental.getBookAuthors() + "' for " + rental.getDaysRented() + " days: \t" + rental.getAmount() + " $\n";
         }
         return result;
     }
 
-    List<String> getRentalsResponse() {
+    List<String> presentation() {
         return this.rentalsResponse;
     }
 }

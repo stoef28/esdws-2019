@@ -1,4 +1,4 @@
-package com.zihler.library;
+package com.zihler.domain.entities;
 
 public class Book {
     private final int key;
@@ -15,7 +15,7 @@ public class Book {
         this.link = link;
     }
 
-    static Book from(String line) {
+    public static Book from(String line) {
         final String[] bookData = line.split(";");
         return new Book(Integer.parseInt(bookData[0]), bookData[1], bookData[2], bookData[3], bookData[4]);
     }
