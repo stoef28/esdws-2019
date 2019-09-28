@@ -30,7 +30,7 @@ public class Rental {
                 thisAmount.add(Amount.of(2));
 
                 if (daysRented().asInt() > 2) {
-                    Amount amount = Amount.of(daysRented().asDouble() - 2 * 1.5);
+                    Amount amount = Amount.of((daysRented().asDouble() - 2) * 1.5);
                     thisAmount.add(amount);
                 }
 
