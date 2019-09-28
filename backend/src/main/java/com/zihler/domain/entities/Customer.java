@@ -9,7 +9,7 @@ public class Customer {
         this.customerName = customerName;
     }
 
-    public CustomerName getCustomerName() {
+    public CustomerName customerName() {
         return customerName;
     }
 }

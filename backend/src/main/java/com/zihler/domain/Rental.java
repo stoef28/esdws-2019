@@ -2,58 +2,67 @@ package com.zihler.domain;
 
 import com.zihler.domain.entities.Book;
 
+import static com.zihler.domain.FrequentRenterPoints.*;
+import static com.zihler.domain.ReadingMode.BOTH;
+
 public class Rental {
     private final Book book;
     private final DaysRented daysRented;
 
-    public Rental(Book book, DaysRented daysRented) {
+    private Rental(Book book, DaysRented daysRented) {
         this.book = book;
         this.daysRented = daysRented;
     }
 
-    private Book getBook() {
-        return book;
+    public static Rental from(Book book, DaysRented daysRented) {
+        return new Rental(book, daysRented);
     }
 
-    DaysRented getDaysRented() {
+    DaysRented daysRented() {
         return daysRented;
     }
 
-    double getAmount() {
-        double thisAmount = 0;
-        switch (getBook().getReadingMode()) {
-            case "IMAGE":
-                thisAmount += 2;
-                if (getDaysRented().get() > 2)
-                    thisAmount += (getDaysRented().get() - 2) * 1.5;
+    Amount amount() {
+        Amount thisAmount = Amount.zero();
+
+        switch (book.readingMode()) {
+            case IMAGE:
+                thisAmount.add(Amount.of(2));
+
+                if (daysRented().asInt() > 2) {
+                    Amount amount = Amount.of(daysRented().asDouble() - 2 * 1.5);
+                    thisAmount.add(amount);
+                }
+
                 break;
-            case "TEXT":
-                thisAmount += 1.5;
-                if (getDaysRented().get() > 3)
-                    thisAmount += (getDaysRented().get() - 3) * 1.5;
+            case TEXT:
+                thisAmount.add(Amount.of(1.5));
+
+                if (daysRented().asInt() > 3) {
+                    thisAmount.add(Amount.of((daysRented().asDouble() - 3) * 1.5));
+                }
                 break;
-            case "BOTH":
-                thisAmount += getDaysRented().get() * 3;
+            case BOTH:
+                thisAmount.add(Amount.of(daysRented().asDouble() * 3));
                 break;
         }
         return thisAmount;
     }
 
-    int getFrequentRenterPoints() {
-        int frequentRenterPoints = 1;
-
+    FrequentRenterPoints frequentRenterPoints() {
+        FrequentRenterPoints points = one();
         // add bonus for a reading mode "both"
-        if (getBook().getReadingMode().equals("BOTH") && getDaysRented().get() > 1) {
-            frequentRenterPoints++;
+        if (book.readingMode().equals(BOTH) && daysRented().asInt() > 1) {
+            points.add(one());
         }
-        return frequentRenterPoints;
+        return points;
     }
 
-    String getBookTitle() {
-        return getBook().getTitle();
+    Title bookTitle() {
+        return book.title();
     }
 
-    String getBookAuthors() {
-        return getBook().getAuthors();
+    Authors bookAuthors() {
+        return book.authors();
     }
 }

@@ -4,7 +4,6 @@ public class DaysRented {
     private int daysRented;
 
     public DaysRented(int daysRented) {
-
         this.daysRented = daysRented;
     }
 
@@ -12,7 +11,17 @@ public class DaysRented {
         return new DaysRented(daysRented);
     }
 
-    public int get() {
+    public double asDouble() {
         return daysRented;
+    }
+
+
+    public int asInt() {
+        return daysRented;
+    }
+
+    @Override
+    public String toString() {
+        return String.valueOf(daysRented);
     }
 }

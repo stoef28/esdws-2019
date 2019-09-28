@@ -1,31 +1,35 @@
 package com.zihler.domain;
 
 public class RentalDocument {
-    private String bookTitle;
-    private String bookAuthors;
-    private int daysRented;
-    private double amount;
+    private Title bookTitle;
+    private Authors bookAuthors;
+    private DaysRented daysRented;
+    private Amount amount;
 
-    RentalDocument(String bookTitle, String bookAuthors, int daysRented, double amount) {
+    private RentalDocument(Title bookTitle, Authors bookAuthors, DaysRented daysRented, Amount amount) {
         this.bookTitle = bookTitle;
         this.bookAuthors = bookAuthors;
         this.daysRented = daysRented;
         this.amount = amount;
     }
 
-    public String getBookTitle() {
+    public static RentalDocument with(Title bookTitle, Authors bookAuthors, DaysRented daysRented, Amount amount) {
+        return new RentalDocument(bookTitle, bookAuthors, daysRented, amount);
+    }
+
+    public Title getBookTitle() {
         return this.bookTitle;
     }
 
-    public String getBookAuthors() {
+    public Authors getBookAuthors() {
         return bookAuthors;
     }
 
-    public int getDaysRented() {
+    public DaysRented getDaysRented() {
         return this.daysRented;
     }
 
-    public double getAmount() {
+    public Amount getAmount() {
         return amount;
     }
 }

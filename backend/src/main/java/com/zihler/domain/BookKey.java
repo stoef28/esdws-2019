@@ -3,7 +3,7 @@ package com.zihler.domain;
 public class BookKey {
     private int bookKey;
 
-    BookKey(int bookKey) {
+    private BookKey(int bookKey) {
         this.bookKey = bookKey;
     }
 
@@ -13,5 +13,10 @@ public class BookKey {
 
     public int get() {
         return bookKey;
+    }
+
+    @Override
+    public String toString() {
+        return String.valueOf(bookKey);
     }
 }

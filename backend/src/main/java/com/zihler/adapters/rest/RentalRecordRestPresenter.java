@@ -3,8 +3,6 @@ package com.zihler.adapters.rest;
 import com.zihler.application.outbound_ports.presentation.RentalRecordPresenter;
 import com.zihler.domain.RentalDocument;
 import com.zihler.domain.RentalsDocument;
-import com.zihler.library.RentalResponse;
-import com.zihler.library.RentalsResponse;
 
 import java.util.List;
 

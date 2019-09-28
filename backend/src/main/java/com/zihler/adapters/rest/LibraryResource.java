@@ -6,15 +6,15 @@ import com.zihler.application.outbound_ports.persistence.BookRepository;
 import com.zihler.application.outbound_ports.persistence.CustomerRepository;
 import com.zihler.application.use_cases.rent_books.RentBooksInteractor;
 import com.zihler.application.use_cases.rent_books.ports.RentBooks;
+import com.zihler.application.use_cases.rent_books.ports.RentBooksInput;
+import com.zihler.application.use_cases.rent_books.ports.RentalRequest;
 import com.zihler.application.use_cases.rent_books.ports.RentalsRequest;
 import com.zihler.domain.CustomerName;
-import com.zihler.domain.RentalsDocument;
-import com.zihler.library.StringRentalRecordPresenter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.*;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,14 +25,12 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 @RequestMapping("api/library")
 public class LibraryResource {
     private final BookRepository bookRepository;
-    private final RentBookInput rentalInput;
     private CustomerRepository customerRepository;
 
     @Autowired
     public LibraryResource(ResourceLoader resourceLoader) throws IOException {
         this.customerRepository = new InMemoryCustomerRepository();
         this.bookRepository = new FileBasedBookRepository(resourceLoader);
-        rentalInput = new RentBookInput(bookRepository);
     }
 
     @GetMapping(
@@ -42,35 +40,32 @@ public class LibraryResource {
     public List<String[]> getBooks() {
         return bookRepository.getAll().stream()
                 .map(book -> new String[]{
-                        book.getKey() + "",
-                        book.getTitle(),
-                        book.getAuthors(),
-                        book.getReadingMode(),
-                        book.getLink()
+                        book.key() + "",
+                        book.title().toString(),
+                        book.authors().toString(),
+                        book.readingMode().name(),
+                        book.link().toString()
                 })
                 .collect(Collectors.toList());
     }
 
     @PostMapping(value = "/fee", produces = APPLICATION_JSON_UTF8_VALUE)
-    public List<String> calculateFee(@RequestBody List<String> rentalRequests) {
-        if (rentalRequests == null || rentalRequests.size() == 0) {
+    public List<String> calculateFee(@RequestBody List<String> rentalRequestData) {
+        if (rentalRequestData == null || rentalRequestData.size() == 0) {
             throw new IllegalArgumentException("rental requests cannot be null!");
         }
-        CustomerName customerName = CustomerName.from(rentalRequests.remove(0));
-        RentalsDocument rentalsRequest = RentalsRequest.from(rentalRequests);
-        RentBookInput rentBookInput = new RentBookInput(bookRepository);
-        RentalRecordRestPresenter stringRentalRecordPresenter = new RentalRecordRestPresenter();
-
+        CustomerName customerName = CustomerName.from(rentalRequestData.remove(0));
+        List<RentalRequest> rentalRequests = RentalRequests.from(rentalRequestData);
         RentalsRequest rentalsRequest = new RentalsRequest(customerName, rentalRequests);
-        RentBooks rentBooks = new RentBooksInteractor(
-                customerRepository,
-                rentalInput,
-                stringRentalRecordPresenter
-        );
 
-        rentBooks.execute(rentBookInput, stringRentalRecordPresenter);
+        RentBooksInput input = new RentBooksInput(bookRepository, rentalsRequest);
+        RentalRecordRestPresenter presenter = new RentalRecordRestPresenter();
 
-        return stringRentalRecordPresenter.presentation();
+        RentBooks rentBooks = new RentBooksInteractor(customerRepository);
+
+        rentBooks.executeWith(input, presenter);
+
+        return presenter.presentation();
     }
 
 }

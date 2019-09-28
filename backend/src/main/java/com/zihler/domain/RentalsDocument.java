@@ -1,28 +1,30 @@
 package com.zihler.domain;
 
-import com.zihler.application.use_cases.rent_books.ports.RentalsRequest;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class RentalsDocument {
-    private final String customerName;
+    private final CustomerName customerName;
     private final List<RentalDocument> rentals;
-    private final double totalAmount;
-    private final int frequentRenterPoints;
+    private final Amount totalAmount;
+    private final FrequentRenterPoints frequentRenterPoints;
 
-    RentalsDocument(RentalRecord rentalRecord) {
-        this.customerName = rentalRecord.getCustomerName();
-        this.rentals = rentalRecord.getRentals().stream().map(rental -> new RentalDocument(rental.getBookTitle(), rental.getBookAuthors(), rental.getDaysRented(), rental.getAmount())).collect(Collectors.toList());
-        this.totalAmount = rentalRecord.getTotalAmount();
-        this.frequentRenterPoints = rentalRecord.getFrequentRenterPoints();
+    private RentalsDocument(RentalRecord rentalRecord) {
+        this.customerName = rentalRecord.customerName();
+        this.rentals = asDocument(rentalRecord.rentals());
+        this.totalAmount = rentalRecord.totalAmount();
+        this.frequentRenterPoints = rentalRecord.frequentRenterPoints();
     }
 
-    public static List<RentalsDocument> from(List<String> rentalRequests) {
-        return null;
+    static RentalsDocument of(RentalRecord rentalRecord) {
+        return new RentalsDocument(rentalRecord);
     }
 
-    public String getCustomerName() {
+    private List<RentalDocument> asDocument(List<Rental> rentals) {
+        return rentals.stream().map(rental -> RentalDocument.with(rental.bookTitle(), rental.bookAuthors(), rental.daysRented(), rental.amount())).collect(Collectors.toList());
+    }
+
+    public CustomerName getCustomerName() {
         return customerName;
     }
 
@@ -30,11 +32,11 @@ public class RentalsDocument {
         return rentals;
     }
 
-    public double getTotalAmount() {
+    public Amount getTotalAmount() {
         return totalAmount;
     }
 
-    public int getFrequentRenterPoints() {
+    public FrequentRenterPoints getFrequentRenterPoints() {
         return frequentRenterPoints;
     }
 }

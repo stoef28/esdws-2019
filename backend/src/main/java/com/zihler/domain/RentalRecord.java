@@ -17,32 +17,32 @@ public class RentalRecord {
         return new RentalRecord(customer, rentals);
     }
 
-    double getTotalAmount() {
-        double totalAmount = 0;
+    Amount totalAmount() {
+        Amount totalAmount = Amount.of(0);
         for (Rental rental : rentals) {
-            totalAmount += rental.getAmount();
+            totalAmount.add(rental.amount());
         }
         return totalAmount;
     }
 
-    int getFrequentRenterPoints() {
-        int frequentRenterPoints = 0;
+    FrequentRenterPoints frequentRenterPoints() {
+        FrequentRenterPoints frequentRenterPoints = FrequentRenterPoints.zero();
         for (Rental rental : rentals) {
             // add frequent renter points
-            frequentRenterPoints += rental.getFrequentRenterPoints();
+            frequentRenterPoints.add(rental.frequentRenterPoints());
         }
         return frequentRenterPoints;
     }
 
-    String getCustomerName() {
-        return customer.getCustomerName().get();
+    CustomerName customerName() {
+        return customer.customerName();
     }
 
-    public List<Rental> getRentals() {
+    public List<Rental> rentals() {
         return rentals;
     }
 
     public RentalsDocument asDocument() {
-        return new RentalsDocument(this);
+        return RentalsDocument.of(this);
     }
 }

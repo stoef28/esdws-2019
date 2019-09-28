@@ -7,19 +7,18 @@ import java.util.List;
 
 public class RentalsRequest {
     private final CustomerName customerName;
-    private final List<RentalsDocument> rentalRequests;
+    private final List<RentalRequest> rentalRequests;
 
-    public RentalsRequest(CustomerName customerName, List<RentalsDocument> rentalRequests) {
+    public RentalsRequest(CustomerName customerName, List<RentalRequest> rentalRequests) {
         this.customerName = customerName;
         this.rentalRequests = rentalRequests;
     }
 
-
-    public CustomerName getCustomerName() {
+    public CustomerName customerName() {
         return customerName;
     }
 
-    public List<RentalsDocument> getRentalRequests() {
+    public List<RentalRequest> getRentalRequests() {
         return rentalRequests;
     }
 }

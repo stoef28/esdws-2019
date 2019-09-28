@@ -1,6 +1,6 @@
 package com.zihler.domain.entities;
 
-import com.zihler.domain.BookKey;
+import com.zihler.domain.*;
 
 public class Book {
     private final BookKey key;
@@ -17,33 +17,29 @@ public class Book {
         this.link = link;
     }
 
-    public static Book from(String[] bookData) {
-        return new Book(
-                BookKey.from(Integer.parseInt(bookData[0])),
-                Title.from(bookData[1]),
-                Authors.from(bookData[2]),
-                ReadingMode.valueOf(bookData[3]),
-                Link.from(bookData[4])
-        );
+    public static Book from(BookKey key, Title title, Authors authors, ReadingMode readingMode, Link link) {
+        return new Book(key, title, authors, readingMode, link);
     }
 
-    public int getKey() {
+    public BookKey key() {
         return key;
     }
 
-    public String getTitle() {
+    public Title title() {
         return title;
     }
 
-    public String getAuthors() {
+    public Authors authors() {
         return authors;
     }
 
-    public String getReadingMode() {
+    public ReadingMode readingMode() {
         return readingMode;
     }
 
-    public String getLink() {
+    public Link link() {
         return link;
     }
+
+
 }
