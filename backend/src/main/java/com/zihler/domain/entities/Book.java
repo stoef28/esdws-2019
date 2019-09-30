@@ -1,9 +1,12 @@
 package com.zihler.domain.entities;
 
 import com.zihler.domain.BookKey;
+import com.zihler.domain.Link;
+import com.zihler.domain.ReadingMode;
+import com.zihler.domain.Title;
 
 public class Book {
-    private final BookKey key;
+    public final BookKey key;
     private final Title title;
     private final Authors authors;
     private final ReadingMode readingMode;
@@ -27,23 +30,25 @@ public class Book {
         );
     }
 
-    public int getKey() {
-        return key.toInt();
+
+    public BookKey getKey() {
+        return key;
     }
 
-    public String getTitle() {
-        return title.toString();
+    public Title getTitle() {
+        return title;
     }
 
-    public String getAuthors() {
-        return authors.toString();
+    public Authors getAuthors() {
+        return authors;
     }
 
-    public String getReadingMode() {
-        return readingMode.toString();
+    public ReadingMode getReadingMode() {
+        return readingMode;
     }
 
-    public String getLink() {
-        return link.toString();
+    public Link getLink() {
+        return link;
     }
+
 }

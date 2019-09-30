@@ -1,10 +1,9 @@
-package com.zihler.domain.entities;
+package com.zihler.domain;
 
 public class Title {
     private String title;
 
-    public Title(String title) {
-
+    private Title(String title) {
         this.title = title;
     }
 

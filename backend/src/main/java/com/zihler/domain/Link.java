@@ -1,4 +1,4 @@
-package com.zihler.domain.entities;
+package com.zihler.domain;
 
 public class Link {
     private String link;

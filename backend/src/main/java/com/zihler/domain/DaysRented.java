@@ -12,7 +12,7 @@ public class DaysRented {
         return new DaysRented(daysRented);
     }
 
-    public int get() {
+    public int toInt() {
         return daysRented;
     }
 }

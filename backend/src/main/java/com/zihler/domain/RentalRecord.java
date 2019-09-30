@@ -35,7 +35,7 @@ public class RentalRecord {
     }
 
     String getCustomerName() {
-        return customer.getCustomerName().get();
+        return customer.getCustomerName().toString();
     }
 
     public List<Rental> getRentals() {

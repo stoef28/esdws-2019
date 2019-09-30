@@ -42,11 +42,11 @@ public class LibraryResource {
     public List<String[]> getBooks() {
         return bookRepository.getAll().stream()
                 .map(book -> new String[]{
-                        book.getKey() + "",
-                        book.getTitle(),
-                        book.getAuthors(),
-                        book.getReadingMode(),
-                        book.getLink()
+                        book.getKey().toString(),
+                        book.getTitle().toString(),
+                        book.getAuthors().toString(),
+                        book.getReadingMode().toString(),
+                        book.getLink().toString()
                 })
                 .collect(Collectors.toList());
     }
@@ -57,6 +57,8 @@ public class LibraryResource {
             throw new IllegalArgumentException("rental requests cannot be null!");
         }
         CustomerName customerName = CustomerName.from(rentalRequests.remove(0));
+        List<RentalRequest> rentalRequests = RentalRequest.from(rentalRequests);
+
         RentalsDocument rentalsRequest = RentalsRequest.from(rentalRequests);
         RentBookInput rentBookInput = new RentBookInput(bookRepository);
         RentalRecordRestPresenter stringRentalRecordPresenter = new RentalRecordRestPresenter();

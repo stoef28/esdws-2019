@@ -14,4 +14,9 @@ public class BookKey {
     public int toInt() {
         return bookKey;
     }
+
+    @Override
+    public String toString() {
+        return String.valueOf(bookKey);
+    }
 }

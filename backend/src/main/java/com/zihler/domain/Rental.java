@@ -21,19 +21,19 @@ public class Rental {
 
     double getAmount() {
         double thisAmount = 0;
-        switch (getBook().getReadingMode()) {
+        switch (getBook().getReadingMode().toString()) {
             case "IMAGE":
                 thisAmount += 2;
-                if (getDaysRented().get() > 2)
-                    thisAmount += (getDaysRented().get() - 2) * 1.5;
+                if (getDaysRented().toInt() > 2)
+                    thisAmount += (getDaysRented().toInt() - 2) * 1.5;
                 break;
             case "TEXT":
                 thisAmount += 1.5;
-                if (getDaysRented().get() > 3)
-                    thisAmount += (getDaysRented().get() - 3) * 1.5;
+                if (getDaysRented().toInt() > 3)
+                    thisAmount += (getDaysRented().toInt() - 3) * 1.5;
                 break;
             case "BOTH":
-                thisAmount += getDaysRented().get() * 3;
+                thisAmount += getDaysRented().toInt() * 3;
                 break;
         }
         return thisAmount;
@@ -43,7 +43,7 @@ public class Rental {
         int frequentRenterPoints = 1;
 
         // add bonus for a reading mode "both"
-        if (getBook().getReadingMode().equals("BOTH") && getDaysRented().get() > 1) {
+        if (getBook().getReadingMode().toString().equals("BOTH") && getDaysRented().toInt() > 1) {
             frequentRenterPoints++;
         }
         return frequentRenterPoints;
@@ -54,6 +54,6 @@ public class Rental {
     }
 
     String getBookAuthors() {
-        return getBook().getAuthors();
+        return getBook().getAuthors().toString();
     }
 }

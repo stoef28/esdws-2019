@@ -11,7 +11,8 @@ public class CustomerName {
         return new CustomerName(customerName);
     }
 
-    public String get() {
+    @Override
+    public String toString() {
         return customerName;
     }
 }
