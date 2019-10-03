@@ -10,4 +10,9 @@ public class ThumbnailLink {
     public static ThumbnailLink from(String thumbnailLink) {
         return new ThumbnailLink(thumbnailLink);
     }
+
+    @Override
+    public String toString() {
+        return thumbnailLink;
+    }
 }

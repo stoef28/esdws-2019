@@ -29,11 +29,11 @@ public class Book {
         return authors;
     }
 
-    public String getId() {
+    public BookId getId() {
         return id;
     }
 
-    public String getThumbnailLink() {
+    public ThumbnailLink getThumbnailLink() {
         return thumbnailLink;
     }
 }

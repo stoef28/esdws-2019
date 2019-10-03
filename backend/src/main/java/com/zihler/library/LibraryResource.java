@@ -11,7 +11,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.util.stream.Collectors.toList;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 
 @CrossOrigin
@@ -20,11 +19,9 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 public class LibraryResource {
     private FileBasedBookRepository bookRepository;
     private InMemoryCustomerRepository customerRepository;
-    private ResourceLoader resourceLoader;
 
     @Autowired
     public LibraryResource(ResourceLoader resourceLoader) throws IOException {
-        this.resourceLoader = resourceLoader;
         this.customerRepository = new InMemoryCustomerRepository();
         this.bookRepository = new FileBasedBookRepository(resourceLoader);
     }
@@ -38,11 +35,11 @@ public class LibraryResource {
         final List<String[]> books = new ArrayList<>();
         for (Book book : bookRepository.getAllBooks()) {
             books.add(new String[]{
-                    book.getId(),
-                    book.getTitle(),
-                    book.getAuthors(),
-                    book.getReadingMode(),
-                    book.getThumbnailLink()
+                    book.getId().toString(),
+                    book.title().toString(),
+                    book.authors().toString(),
+                    book.readingMode().toString(),
+                    book.getThumbnailLink().toString()
             });
         }
         return books;
@@ -70,9 +67,6 @@ public class LibraryResource {
             DaysRented daysRented = DaysRented.from(rentalData[1]);
 
             Book book = bookRepository.getById(bookId);
-            Rental rental = new Rental(book, daysRented);
-            frequentRenterPoints += rental.getFrequentRenterPoints();
-            Book book = books.get(bookId.asInt());
             Rental rental = new Rental(book, daysRented);
 
             frequentRenterPoints.plus(rental.frequentRenterPoints());
