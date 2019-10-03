@@ -12,6 +12,8 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.io.IOException;
+
 import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -23,7 +25,7 @@ public class LibraryResourceTest {
 
 
     @Before
-    public void setup() {
+    public void setup() throws IOException {
         DefaultResourceLoader resourceLoader = new DefaultResourceLoader();
 
         libraryResource = new LibraryResource(resourceLoader);

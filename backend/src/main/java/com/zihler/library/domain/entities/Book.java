@@ -26,4 +26,12 @@ public class Book {
     public String getAuthors() {
         return authors;
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getThumbnailLink() {
+        return thumbnailLink;
+    }
 }

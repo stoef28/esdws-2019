@@ -1,5 +1,6 @@
 package com.zihler.library;
 
+import com.zihler.library.adapters.file_persistance.FileBasedBookRepository;
 import com.zihler.library.domain.entities.Book;
 import com.zihler.library.domain.values.Rental;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +8,6 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,37 +17,38 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 @RestController
 @RequestMapping("api/library")
 public class LibraryResource {
+    private FileBasedBookRepository bookRepository;
     private InMemoryCustomerRepository customerRepository;
     private ResourceLoader resourceLoader;
 
     @Autowired
-    public LibraryResource(ResourceLoader resourceLoader) {
+    public LibraryResource(ResourceLoader resourceLoader) throws IOException {
         this.resourceLoader = resourceLoader;
         this.customerRepository = new InMemoryCustomerRepository();
+        this.bookRepository = new FileBasedBookRepository(resourceLoader);
     }
 
     @GetMapping(
             value = "/books",
             produces = APPLICATION_JSON_UTF8_VALUE
     )
-    public List<String[]> getBooks() throws IOException {
+    public List<String[]> getBooks() {
+
         final List<String[]> books = new ArrayList<>();
-        final BufferedReader bufferedReader = new BufferedReader(
-                new InputStreamReader(
-                        resourceLoader.getResource("classpath:books.csv").getInputStream(),
-                        StandardCharsets.UTF_8
-                )
-        );
-        while (bufferedReader.ready()) {
-            final String line = bufferedReader.readLine();
-            final String[] book = line.split(";");
-            books.add(book);
+        for (Book book : bookRepository.getAllBooks()) {
+            books.add(new String[]{
+                    book.getId(),
+                    book.getTitle(),
+                    book.getAuthors(),
+                    book.getReadingMode(),
+                    book.getThumbnailLink()
+            });
         }
         return books;
     }
 
     @PostMapping(value = "/fee", produces = APPLICATION_JSON_UTF8_VALUE)
-    public List<String> calculateFee(@RequestBody List<String> rentBooksRequests) throws IOException {
+    public List<String> calculateFee(@RequestBody List<String> rentBooksRequests) {
         if (rentBooksRequests == null || rentBooksRequests.size() == 0) {
             throw new IllegalArgumentException("rent books requests cannot be null!");
         }
@@ -55,21 +56,6 @@ public class LibraryResource {
 
         // fetch customer
         Customer customer = customerRepository.findByUsername(customerName);
-
-        // fetch books
-        final BufferedReader bufferedReader = new BufferedReader(
-                new InputStreamReader(
-                        resourceLoader.getResource("classpath:books.csv").getInputStream(),
-                        StandardCharsets.UTF_8
-                )
-        );
-        List<Book> books = new ArrayList<>();
-        while (bufferedReader.ready()) {
-            final String line = bufferedReader.readLine();
-            final String[] bookData = line.split(";");
-            Book book = new Book(bookData[0], bookData[1], bookData[2], bookData[3], bookData[4]);
-            books.add(book);
-        }
 
         // calculate fee, frequent renter points, and document to display in front end
         double totalAmount = 0;
@@ -81,7 +67,8 @@ public class LibraryResource {
             int bookId = Integer.parseInt(rentalData[0]);
             int daysRented = Integer.parseInt(rentalData[1]);
 
-            Rental rental = new Rental(books.get(bookId), daysRented);
+            Book book = bookRepository.getById(bookId);
+            Rental rental = new Rental(book, daysRented);
             frequentRenterPoints += rental.getFrequentRenterPoints();
             // create figures for this rental
             result += "\t'" + rental.getBookTitle() + "' by '" + rental.getBookAuthors() + "' for " + rental.getDaysRented() + " days: \t" + rental.getAmount() + " $\n";
