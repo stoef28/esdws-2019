@@ -1,29 +1,31 @@
 package com.zihler.library.domain.entities;
 
-public class Book {
-    private final String id;
-    private final String title;
-    private final String authors;
-    private final String readingMode;
-    private final String thumbnailLink;
+import com.zihler.library.domain.*;
 
-    public Book(String id, String title, String authors, String readingMode, String thumbnailLink) {
-        this.id = id;
+public class Book {
+    private final BookId id;
+    private final Title title;
+    private final Authors authors;
+    private final ReadingMode readingMode;
+    private final ThumbnailLink thumbnailLink;
+
+    public Book(BookId bookId, Title title, Authors authors, ReadingMode readingMode, ThumbnailLink thumbnailLink) {
+        this.id = bookId;
         this.title = title;
         this.authors = authors;
         this.readingMode = readingMode;
         this.thumbnailLink = thumbnailLink;
     }
 
-    public String getReadingMode() {
+    public ReadingMode readingMode() {
         return readingMode;
     }
 
-    public String getTitle() {
+    public Title title() {
         return title;
     }
 
-    public String getAuthors() {
+    public Authors authors() {
         return authors;
     }
 }
