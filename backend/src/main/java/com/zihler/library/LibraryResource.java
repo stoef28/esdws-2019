@@ -57,14 +57,8 @@ public class LibraryResource {
 
         // calculate fee, frequent renter points, and document to display in front end
         List<Rental> rentals = new ArrayList<>();
-        Amount totalAmount = Amount.of(0);
-        FrequentRenterPoints frequentRenterPoints = FrequentRenterPoints.of(0);
-        String result = "Rental Record for " + customer.getName() + "\n";
-
         for (int i = 0; i < rentBooksRequests.size(); i++) {
             final String[] rentalData = rentBooksRequests.get(i).split(" ");
-            int bookId = Integer.parseInt(rentalData[0]);
-            int daysRented = Integer.parseInt(rentalData[1]);
 
             BookId bookId = BookId.from(rentalData[0]);
             DaysRented daysRented = DaysRented.from(rentalData[1]);
@@ -83,31 +77,29 @@ public class LibraryResource {
         return List.of(result);
     }
 
-    private double getTotalAmount(List<Rental> rentals) {
-        double totalAmount = 0;
+    private Amount getTotalAmount(List<Rental> rentals) {
+        Amount totalAmount = Amount.of(0);
         for (Rental rental : rentals) {
-            totalAmount += rental.getAmount();
+            totalAmount.plus(rental.amount());
         }
         return totalAmount;
     }
 
-    private int getFrequentRenterPoints(List<Rental> rentals) {
-        int frequentRenterPoints = 0;
+    private FrequentRenterPoints getFrequentRenterPoints(List<Rental> rentals) {
+        FrequentRenterPoints frequentRenterPoints = FrequentRenterPoints.of(0);
+
         for (Rental rental : rentals) {
-            frequentRenterPoints += rental.getFrequentRenterPoints();
+            frequentRenterPoints.plus(rental.frequentRenterPoints());
         }
+
         return frequentRenterPoints;
     }
 
     private String format(List<Rental> rentals) {
         String result="";
         for (Rental rental : rentals) {
-
-            frequentRenterPoints.plus(rental.frequentRenterPoints());
             // create figures for this rental
-            result += "\t'" + rental.getBookTitle() + "' by '" + rental.getBookAuthors() + "' for " + rental.getDaysRented() + " days: \t" + rental.getAmount() + " $\n";
             result += "\t'" + rental.bookTitle() + "' by '" + rental.bookAuthors() + "' for " + rental.daysRented() + " days: \t" + rental.amount() + " $\n";
-            totalAmount.plus(rental.amount());
         }
         return result;
     }
