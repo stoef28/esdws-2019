@@ -85,7 +85,8 @@ public class LibraryResource {
 
         for (int i = 0; i < rentBooksRequests.size(); i++) {
             final String[] rental = rentBooksRequests.get(i).split(" ");
-            Book book = books.get(Integer.parseInt(rental[0]));
+            BookId bookId = BookId.from(rental[0]);
+            Book book = books.get(bookId.asInt());
             double thisAmount = 0;
 
             int daysRented = Integer.parseInt(rental[1]);
