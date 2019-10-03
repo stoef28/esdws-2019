@@ -35,11 +35,11 @@ public class LibraryResource {
         final List<String[]> books = new ArrayList<>();
         for (Book book : bookRepository.allBooks()) {
             books.add(new String[]{
-                    book.getId().toString(),
+                    book.id().toString(),
                     book.title().toString(),
                     book.authors().toString(),
                     book.readingMode().toString(),
-                    book.getThumbnailLink().toString()
+                    book.thumbnailLink().toString()
             });
         }
         return books;
