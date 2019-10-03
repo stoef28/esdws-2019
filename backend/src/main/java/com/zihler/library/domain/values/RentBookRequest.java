@@ -1,19 +1,19 @@
 package com.zihler.library.domain.values;
 
 public class RentBookRequest {
-    private final int bookId;
-    private final int daysRented;
+    private final BookId bookId;
+    private final DaysRented daysRented;
 
-    public RentBookRequest(int bookId, int daysRented) {
+    public RentBookRequest(BookId bookId, DaysRented daysRented) {
         this.bookId = bookId;
         this.daysRented = daysRented;
     }
 
-    public int getBookId() {
+    public BookId getBookId() {
         return bookId;
     }
 
-    public int getDaysRented() {
+    public DaysRented getDaysRented() {
         return daysRented;
     }
 }

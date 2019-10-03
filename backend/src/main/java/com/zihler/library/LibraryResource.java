@@ -65,9 +65,7 @@ public class LibraryResource {
             BookId bookId = BookId.from(rentalData[0]);
             DaysRented daysRented = DaysRented.from(rentalData[1]);
 
-            Book book = bookRepository.findById(bookId);
-            Rental rental = new Rental(book, daysRented);
-            RentBookRequest rentBookRequest = new RentBookRequest(Integer.parseInt(rentalData[0]), Integer.parseInt(rentalData[1]));
+            RentBookRequest rentBookRequest = new RentBookRequest(bookId, daysRented);
 
             Book book = bookRepository.findById(rentBookRequest.getBookId());
             Rental rental = new Rental(book, rentBookRequest.getDaysRented());
@@ -102,7 +100,7 @@ public class LibraryResource {
     }
 
     private String format(List<Rental> rentals) {
-        String result="";
+        String result = "";
         for (Rental rental : rentals) {
             // create figures for this rental
             result += "\t'" + rental.bookTitle() + "' by '" + rental.bookAuthors() + "' for " + rental.daysRented() + " days: \t" + rental.amount() + " $\n";
