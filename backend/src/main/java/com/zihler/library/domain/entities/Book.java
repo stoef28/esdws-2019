@@ -29,11 +29,11 @@ public class Book {
         return authors;
     }
 
-    public BookId getId() {
+    public BookId id() {
         return id;
     }
 
-    public ThumbnailLink getThumbnailLink() {
+    public ThumbnailLink thumbnailLink() {
         return thumbnailLink;
     }
 }
