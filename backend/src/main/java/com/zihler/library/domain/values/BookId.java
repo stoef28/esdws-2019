@@ -1,4 +1,4 @@
-package com.zihler.library.domain;
+package com.zihler.library.domain.values;
 
 public class BookId {
     private int bookId;

@@ -1,4 +1,4 @@
-package com.zihler.library.domain;
+package com.zihler.library.domain.values;
 
 public class Title {
     private String title;

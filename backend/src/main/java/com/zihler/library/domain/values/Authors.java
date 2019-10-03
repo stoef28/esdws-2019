@@ -1,4 +1,4 @@
-package com.zihler.library.domain;
+package com.zihler.library.domain.values;
 
 import java.util.List;
 import java.util.stream.Collectors;

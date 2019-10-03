@@ -1,8 +1,8 @@
 package com.zihler.library;
 
-import com.zihler.library.domain.*;
 import com.zihler.library.domain.entities.Book;
 import com.zihler.library.domain.values.Rental;
+import com.zihler.library.domain.values.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.web.bind.annotation.*;

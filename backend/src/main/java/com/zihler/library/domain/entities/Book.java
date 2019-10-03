@@ -1,6 +1,6 @@
 package com.zihler.library.domain.entities;
 
-import com.zihler.library.domain.*;
+import com.zihler.library.domain.values.*;
 
 public class Book {
     private final BookId id;
