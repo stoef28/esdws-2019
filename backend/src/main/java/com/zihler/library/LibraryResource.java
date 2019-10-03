@@ -1,7 +1,7 @@
 package com.zihler.library;
 
-import com.zihler.library.domain.*;
 import com.zihler.library.domain.entities.Book;
+import com.zihler.library.domain.values.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +11,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.zihler.library.domain.ReadingMode.BOTH;
+import static com.zihler.library.domain.values.ReadingMode.BOTH;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 
