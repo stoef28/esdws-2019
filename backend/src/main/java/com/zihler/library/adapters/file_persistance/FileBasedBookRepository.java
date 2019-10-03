@@ -41,7 +41,7 @@ public class FileBasedBookRepository {
         return books;
     }
 
-    public Book getById(BookId id) {
+    public Book findById(BookId id) {
         return getAllBooks().get(id.asInt());
     }
 }

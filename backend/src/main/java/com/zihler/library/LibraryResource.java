@@ -66,7 +66,7 @@ public class LibraryResource {
             BookId bookId = BookId.from(rentalData[0]);
             DaysRented daysRented = DaysRented.from(rentalData[1]);
 
-            Book book = bookRepository.getById(bookId);
+            Book book = bookRepository.findById(bookId);
             Rental rental = new Rental(book, daysRented);
 
             frequentRenterPoints.plus(rental.frequentRenterPoints());
