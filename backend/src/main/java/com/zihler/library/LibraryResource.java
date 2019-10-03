@@ -33,7 +33,7 @@ public class LibraryResource {
     public List<String[]> getBooks() {
 
         final List<String[]> books = new ArrayList<>();
-        for (Book book : bookRepository.getAllBooks()) {
+        for (Book book : bookRepository.allBooks()) {
             books.add(new String[]{
                     book.getId().toString(),
                     book.title().toString(),

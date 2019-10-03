@@ -37,11 +37,11 @@ public class FileBasedBookRepository {
         }
     }
 
-    public List<Book> getAllBooks() {
+    public List<Book> allBooks() {
         return books;
     }
 
     public Book findById(BookId id) {
-        return getAllBooks().get(id.asInt());
+        return allBooks().get(id.asInt());
     }
 }
