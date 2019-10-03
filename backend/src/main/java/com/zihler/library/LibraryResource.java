@@ -3,6 +3,8 @@ package com.zihler.library;
 import com.zihler.library.adapters.file_persistance.FileBasedBookRepository;
 import com.zihler.library.domain.entities.Book;
 import com.zihler.library.domain.values.*;
+import com.zihler.library.domain.values.RentBookRequest;
+import com.zihler.library.domain.values.Rental;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.web.bind.annotation.*;
@@ -65,6 +67,10 @@ public class LibraryResource {
 
             Book book = bookRepository.findById(bookId);
             Rental rental = new Rental(book, daysRented);
+            RentBookRequest rentBookRequest = new RentBookRequest(Integer.parseInt(rentalData[0]), Integer.parseInt(rentalData[1]));
+
+            Book book = bookRepository.findById(rentBookRequest.getBookId());
+            Rental rental = new Rental(book, rentBookRequest.getDaysRented());
             rentals.add(rental);
         }
 
