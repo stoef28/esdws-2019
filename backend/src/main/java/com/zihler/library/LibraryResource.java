@@ -2,7 +2,7 @@ package com.zihler.library;
 
 import com.zihler.library.adapters.file_persistance.FileBasedBookRepository;
 import com.zihler.library.domain.entities.Book;
-import com.zihler.library.domain.values.RentBookRequest;
+import com.zihler.library.use_cases.rent_books.ports.RentBookRequest;
 import com.zihler.library.domain.values.Rental;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
