@@ -2,52 +2,54 @@ package com.zihler.library.domain.values;
 
 import com.zihler.library.domain.entities.Book;
 
+import static com.zihler.library.domain.values.ReadingMode.BOTH;
+
 public class Rental {
     private final Book book;
-    private final int daysRented;
+    private final DaysRented daysRented;
 
-    public Rental(Book book, int daysRented) {
+    public Rental(Book book, DaysRented daysRented) {
         this.book = book;
         this.daysRented = daysRented;
     }
 
-    public int getDaysRented() {
+    public DaysRented daysRented() {
         return daysRented;
     }
 
-    public String getBookAuthors() {
-        return book.getAuthors();
+    public Authors bookAuthors() {
+        return book.authors();
     }
 
-    public String getBookTitle() {
-        return book.getTitle();
+    public Title bookTitle() {
+        return book.title();
     }
 
-    public int getFrequentRenterPoints() {
+    public FrequentRenterPoints frequentRenterPoints() {
         // add bonus for a reading mode "both"
-        if (book.getReadingMode().equals("BOTH") && daysRented > 1) {
-            return 2;
+        if (book.readingMode().equals(BOTH) && daysRented.asInt() > 1) {
+            return FrequentRenterPoints.of(2);
         }
-        return 1;
+        return FrequentRenterPoints.of(1);
     }
 
-    public double getAmount() {
-        double thisAmount = 0;
-        switch (book.getReadingMode()) {
-            case "IMAGE":
-                thisAmount += 2;
-                if (daysRented > 2)
-                    thisAmount += (daysRented - 2) * 1.5;
+    public Amount amount() {
+        double amount = 0;
+        switch (book.readingMode()) {
+            case IMAGE:
+                amount += 2;
+                if (daysRented.asInt() > 2)
+                    amount += (daysRented.asInt() - 2) * 1.5;
                 break;
-            case "TEXT":
-                thisAmount += 1.5;
-                if (daysRented > 3)
-                    thisAmount += (daysRented - 3) * 1.5;
+            case TEXT:
+                amount += 1.5;
+                if (daysRented.asInt() > 3)
+                    amount += (daysRented.asInt() - 3) * 1.5;
                 break;
-            case "BOTH":
-                thisAmount += daysRented * 3;
+            case BOTH:
+                amount += daysRented.asInt() * 3;
                 break;
         }
-        return thisAmount;
+        return Amount.of(amount);
     }
 }

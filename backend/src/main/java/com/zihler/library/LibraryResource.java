@@ -11,7 +11,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.zihler.library.domain.ReadingMode.BOTH;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 
@@ -79,20 +78,23 @@ public class LibraryResource {
         }
 
         // calculate fee, frequent renter points, and document to display in front end
-        double totalAmount = 0;
-        int frequentRenterPoints = 0;
+        Amount totalAmount = Amount.of(0);
+        FrequentRenterPoints frequentRenterPoints = FrequentRenterPoints.of(0);
         String result = "Rental Record for " + customer.getName() + "\n";
 
         for (int i = 0; i < rentBooksRequests.size(); i++) {
             final String[] rentalData = rentBooksRequests.get(i).split(" ");
-            int bookId = Integer.parseInt(rentalData[0]);
-            int daysRented = Integer.parseInt(rentalData[1]);
 
-            Rental rental = new Rental(books.get(bookId), daysRented);
-            frequentRenterPoints += rental.getFrequentRenterPoints();
+            BookId bookId = BookId.from(rentalData[0]);
+            DaysRented daysRented = DaysRented.from(rentalData[1]);
+
+            Book book = books.get(bookId.asInt());
+            Rental rental = new Rental(book, daysRented);
+
+            frequentRenterPoints.plus(rental.frequentRenterPoints());
             // create figures for this rental
-            result += "\t'" + rental.getBookTitle() + "' by '" + rental.getBookAuthors() + "' for " + rental.getDaysRented() + " days: \t" + rental.getAmount() + " $\n";
-            totalAmount += rental.getAmount();
+            result += "\t'" + rental.bookTitle() + "' by '" + rental.bookAuthors() + "' for " + rental.daysRented() + " days: \t" + rental.amount() + " $\n";
+            totalAmount.plus(rental.amount());
         }
 
         // add footer lines
