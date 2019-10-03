@@ -67,7 +67,7 @@ public class LibraryResource {
             int bookId = Integer.parseInt(rentalData[0]);
             int daysRented = Integer.parseInt(rentalData[1]);
 
-            Book book = bookRepository.getById(bookId);
+            Book book = bookRepository.findById(bookId);
             Rental rental = new Rental(book, daysRented);
             frequentRenterPoints += rental.getFrequentRenterPoints();
             // create figures for this rental

@@ -33,7 +33,7 @@ public class FileBasedBookRepository {
         return books;
     }
 
-    public Book getById(int bookId) {
+    public Book findById(int bookId) {
         return getAllBooks().get(bookId);
     }
 }
