@@ -34,22 +34,24 @@ public class Rental {
     }
 
     public Amount amount() {
-        double amount = 0;
+        Amount amount = Amount.of(0);
         switch (book.readingMode()) {
             case IMAGE:
-                amount += 2;
-                if (daysRented.asInt() > 2)
-                    amount += (daysRented.asInt() - 2) * 1.5;
+                amount.plus(Amount.of(2));
+                if (daysRented.asInt() > 2) {
+                    amount.plus(Amount.of((daysRented.asInt() - 2) * 1.5));
+                }
                 break;
             case TEXT:
-                amount += 1.5;
-                if (daysRented.asInt() > 3)
-                    amount += (daysRented.asInt() - 3) * 1.5;
+                amount.plus(Amount.of(1.5));
+                if (daysRented.asInt() > 3) {
+                    amount.plus(Amount.of((daysRented.asInt() - 3) * 1.5));
+                }
                 break;
             case BOTH:
-                amount += daysRented.asInt() * 3;
+                amount.plus(Amount.of(daysRented.asInt() * 3));
                 break;
         }
-        return Amount.of(amount);
+        return amount;
     }
 }
