@@ -1,4 +1,7 @@
-package com.zihler.library.domain.values;
+package com.zihler.library.use_cases.rent_books.ports;
+
+import com.zihler.library.domain.values.BookId;
+import com.zihler.library.domain.values.DaysRented;
 
 public class RentBookRequest {
     private final BookId bookId;
