@@ -58,7 +58,7 @@ public class LibraryResource {
         Customer customer = customerRepository.findByUsername(customerName);
 
         // calculate fee, frequent renter points, and document to display in front end
-        List<Rental> rentals = new ArrayList<>();
+        List<RentBookRequest> rentBookRequests = new ArrayList<>();
         for (int i = 0; i < rentBooksRequests.size(); i++) {
             final String[] rentalData = rentBooksRequests.get(i).split(" ");
 
@@ -66,7 +66,12 @@ public class LibraryResource {
             DaysRented daysRented = DaysRented.from(rentalData[1]);
 
             RentBookRequest rentBookRequest = new RentBookRequest(bookId, daysRented);
+            RentBookRequest rentBookRequest = new RentBookRequest(Integer.parseInt(rentalData[0]), Integer.parseInt(rentalData[1]));
+            rentBookRequests.add(rentBookRequest);
+        }
 
+        List<Rental> rentals = new ArrayList<>();
+        for (RentBookRequest rentBookRequest : rentBookRequests) {
             Book book = bookRepository.findById(rentBookRequest.getBookId());
             Rental rental = new Rental(book, rentBookRequest.getDaysRented());
             rentals.add(rental);
