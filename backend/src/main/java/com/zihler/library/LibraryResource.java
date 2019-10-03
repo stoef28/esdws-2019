@@ -16,12 +16,12 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 @CrossOrigin
 @RestController
 @RequestMapping("api/library")
-public class Library {
+public class LibraryResource {
     private InMemoryCustomerRepository customerRepository;
     private ResourceLoader resourceLoader;
 
     @Autowired
-    public Library(ResourceLoader resourceLoader) {
+    public LibraryResource(ResourceLoader resourceLoader) {
         this.resourceLoader = resourceLoader;
         this.customerRepository = new InMemoryCustomerRepository();
     }
