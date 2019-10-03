@@ -47,14 +47,16 @@ public class Library {
     }
 
     @PostMapping(value = "/fee", produces = APPLICATION_JSON_UTF8_VALUE)
-    public List<String> calculateFee(@RequestBody List<String> rentalRequests) throws IOException {
-        if (rentalRequests == null || rentalRequests.size() == 0) {
-            throw new IllegalArgumentException("rental requests cannot be null!");
+    public List<String> calculateFee(@RequestBody List<String> rentBooksRequests) throws IOException {
+        if (rentBooksRequests == null || rentBooksRequests.size() == 0) {
+            throw new IllegalArgumentException("rent books requests cannot be null!");
         }
-        String customerName = rentalRequests.remove(0);
+        String customerName = rentBooksRequests.remove(0);
 
+        // fetch customer
         Customer customer = customerRepository.findByUsername(customerName);
 
+        // fetch books
         final BufferedReader bufferedReader = new BufferedReader(
                 new InputStreamReader(
                         resourceLoader.getResource("classpath:books.csv").getInputStream(),
@@ -68,12 +70,13 @@ public class Library {
             books.add(book);
         }
 
+        // calculate fee, frequent renter points, and document to display in front end
         double totalAmount = 0;
         int frequentRenterPoints = 0;
         String result = "Rental Record for " + customer.getName() + "\n";
 
-        for (int i = 0; i < rentalRequests.size(); i++) {
-            final String[] rental = rentalRequests.get(i).split(" ");
+        for (int i = 0; i < rentBooksRequests.size(); i++) {
+            final String[] rental = rentBooksRequests.get(i).split(" ");
             final String[] book = books.get(Integer.parseInt(rental[0]));
             double thisAmount = 0;
 
@@ -92,7 +95,7 @@ public class Library {
                     break;
                 case "BOTH":
                     thisAmount += daysRented * 3;
-                    break;
+                break;
             }
 
             // add frequent renter points
