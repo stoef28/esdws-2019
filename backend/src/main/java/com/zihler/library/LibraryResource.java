@@ -1,12 +1,11 @@
 package com.zihler.library;
 
+import com.zihler.library.domain.entities.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.*;
-import java.net.URISyntaxException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,10 +62,11 @@ public class LibraryResource {
                         StandardCharsets.UTF_8
                 )
         );
-        final List<String[]> books = new ArrayList<>();
+        List<Book> books = new ArrayList<>();
         while (bufferedReader.ready()) {
             final String line = bufferedReader.readLine();
-            final String[] book = line.split(";");
+            final String[] bookData = line.split(";");
+            Book book = new Book(bookData[0], bookData[1], bookData[2], bookData[3], bookData[4]);
             books.add(book);
         }
 
@@ -77,11 +77,11 @@ public class LibraryResource {
 
         for (int i = 0; i < rentBooksRequests.size(); i++) {
             final String[] rental = rentBooksRequests.get(i).split(" ");
-            final String[] book = books.get(Integer.parseInt(rental[0]));
+            Book book = books.get(Integer.parseInt(rental[0]));
             double thisAmount = 0;
 
             int daysRented = Integer.parseInt(rental[1]);
-            String readingMode = book[3];
+            String readingMode = book.getReadingMode();
             switch (readingMode) {
                 case "IMAGE":
                     thisAmount += 2;
@@ -95,7 +95,7 @@ public class LibraryResource {
                     break;
                 case "BOTH":
                     thisAmount += daysRented * 3;
-                break;
+                    break;
             }
 
             // add frequent renter points
@@ -107,7 +107,7 @@ public class LibraryResource {
             }
 
             // create figures for this rental
-            result += "\t'" + book[1] + "' by '" + book[2] + "' for " + daysRented + " days: \t" + thisAmount + " $\n";
+            result += "\t'" + book.getTitle() + "' by '" + book.getAuthors() + "' for " + daysRented + " days: \t" + thisAmount + " $\n";
             totalAmount += thisAmount;
         }
 
