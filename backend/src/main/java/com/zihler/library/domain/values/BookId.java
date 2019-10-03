@@ -17,4 +17,7 @@ public class BookId {
         return String.valueOf(bookId);
     }
 
+    public int asInt() {
+        return bookId;
+    }
 }
