@@ -20,11 +20,9 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 public class LibraryResource {
     private FileBasedBookRepository bookRepository;
     private InMemoryCustomerRepository customerRepository;
-    private ResourceLoader resourceLoader;
 
     @Autowired
     public LibraryResource(ResourceLoader resourceLoader) throws IOException {
-        this.resourceLoader = resourceLoader;
         this.customerRepository = new InMemoryCustomerRepository();
         this.bookRepository = new FileBasedBookRepository(resourceLoader);
     }
@@ -59,19 +57,9 @@ public class LibraryResource {
         Customer customer = customerRepository.findByUsername(customerName);
 
         // calculate fee, frequent renter points, and document to display in front end
-        List<RentBookRequest> rentBookRequests = new ArrayList<>();
-        for (int i = 0; i < rentBooksRequests.size(); i++) {
-            final String[] rentalData = rentBooksRequests.get(i).split(" ");
-            RentBookRequest rentBookRequest = new RentBookRequest(Integer.parseInt(rentalData[0]), Integer.parseInt(rentalData[1]));
-            rentBookRequests.add(rentBookRequest);
-        }
+        List<RentBookRequest> rentBookRequests = getRentBookRequests(rentBooksRequests);
 
-        List<Rental> rentals = new ArrayList<>();
-        for (RentBookRequest rentBookRequest : rentBookRequests) {
-            Book book = bookRepository.findById(rentBookRequest.getBookId());
-            Rental rental = new Rental(book, rentBookRequest.getDaysRented());
-            rentals.add(rental);
-        }
+        List<Rental> rentals = getRentals(rentBookRequests);
 
         String result = "Rental Record for " + customer.getName() + "\n";
         result += format(rentals);
@@ -80,6 +68,26 @@ public class LibraryResource {
         result += "You earned " + getFrequentRenterPoints(rentals) + " frequent renter points\n";
 
         return List.of(result);
+    }
+
+    private List<RentBookRequest> getRentBookRequests(@RequestBody List<String> rentBooksRequests) {
+        List<RentBookRequest> rentBookRequests = new ArrayList<>();
+        for (int i = 0; i < rentBooksRequests.size(); i++) {
+            final String[] rentalData = rentBooksRequests.get(i).split(" ");
+            RentBookRequest rentBookRequest = new RentBookRequest(Integer.parseInt(rentalData[0]), Integer.parseInt(rentalData[1]));
+            rentBookRequests.add(rentBookRequest);
+        }
+        return rentBookRequests;
+    }
+
+    private List<Rental> getRentals(List<RentBookRequest> rentBookRequests) {
+        List<Rental> rentals = new ArrayList<>();
+        for (RentBookRequest rentBookRequest : rentBookRequests) {
+            Book book = bookRepository.findById(rentBookRequest.getBookId());
+            Rental rental = new Rental(book, rentBookRequest.getDaysRented());
+            rentals.add(rental);
+        }
+        return rentals;
     }
 
     private double getTotalAmount(List<Rental> rentals) {
