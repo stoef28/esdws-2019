@@ -1,6 +1,7 @@
 package com.zihler.library;
 
 import com.zihler.library.adapters.file_persistance.FileBasedBookRepository;
+import com.zihler.library.adapters.rest.RestRentalRecordPresenter;
 import com.zihler.library.domain.entities.Book;
 import com.zihler.library.domain.values.RentalRecord;
 import com.zihler.library.use_cases.rent_books.ports.RentBookRequest;
@@ -63,13 +64,10 @@ public class LibraryResource {
         List<Rental> rentals = getRentals(rentBookRequests);
         RentalRecord rentalRecord = RentalRecord.from(customer, rentals);
 
-        String result = "Rental Record for " + rentalRecord.getCustomerName() + "\n";
-        result += format(rentalRecord.getRentals());
-        // add footer lines
-        result += "You owe " + rentalRecord.getTotalAmount() + " $\n";
-        result += "You earned " + rentalRecord.getFrequentRenterPoints() + " frequent renter points\n";
+        RestRentalRecordPresenter restRentalRecordPresenter = new RestRentalRecordPresenter();
+        restRentalRecordPresenter.present(rentalRecord);
 
-        return List.of(result);
+        return restRentalRecordPresenter.presentation();
     }
 
     private List<RentBookRequest> getRentBookRequests(List<String> rentBooksRequests) {
@@ -90,15 +88,6 @@ public class LibraryResource {
             rentals.add(rental);
         }
         return rentals;
-    }
-
-    private String format(List<Rental> rentals) {
-        String result = "";
-        for (Rental rental : rentals) {
-            // create figures for this rental
-            result += "\t'" + rental.getBookTitle() + "' by '" + rental.getBookAuthors() + "' for " + rental.getDaysRented() + " days: \t" + rental.getAmount() + " $\n";
-        }
-        return result;
     }
 
 }
