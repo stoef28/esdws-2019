@@ -74,7 +74,7 @@ public class LibraryResource {
             BookId bookId = BookId.from(rentalData[0]);
             DaysRented daysRented = DaysRented.from(rentalData[1]);
 
-            RentBookRequest rentBookRequest = new RentBookRequest(bookId, daysRented);
+            RentBookRequest rentBookRequest = RentBookRequest.from(bookId, daysRented);
             rentBookRequests.add(rentBookRequest);
         }
         return rentBookRequests;

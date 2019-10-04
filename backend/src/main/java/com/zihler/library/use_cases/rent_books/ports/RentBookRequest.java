@@ -7,9 +7,13 @@ public class RentBookRequest {
     private final BookId bookId;
     private final DaysRented daysRented;
 
-    public RentBookRequest(BookId bookId, DaysRented daysRented) {
+    private RentBookRequest(BookId bookId, DaysRented daysRented) {
         this.bookId = bookId;
         this.daysRented = daysRented;
+    }
+
+    public static RentBookRequest from(BookId bookId, DaysRented daysRented) {
+        return new RentBookRequest(bookId, daysRented);
     }
 
     public BookId getBookId() {
