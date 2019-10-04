@@ -58,6 +58,30 @@ public class LibraryResource {
         Customer customer = customerRepository.findByUsername(customerName);
 
         // calculate fee, frequent renter points, and document to display in front end
+        List<RentBookRequest> rentBookRequests = toRequests(rentBooksRequests);
+
+        List<Rental> rentals = rentals(rentBookRequests);
+
+        String result = "Rental Record for " + customer.getName() + "\n";
+        result += format(rentals);
+        // add footer lines
+        result += "You owe " + getTotalAmount(rentals) + " $\n";
+        result += "You earned " + getFrequentRenterPoints(rentals) + " frequent renter points\n";
+
+        return List.of(result);
+    }
+
+    private List<Rental> rentals(List<RentBookRequest> rentBookRequests) {
+        List<Rental> rentals = new ArrayList<>();
+        for (RentBookRequest rentBookRequest : rentBookRequests) {
+            Book book = bookRepository.findById(rentBookRequest.getBookId());
+            Rental rental = new Rental(book, rentBookRequest.getDaysRented());
+            rentals.add(rental);
+        }
+        return rentals;
+    }
+
+    private List<RentBookRequest> toRequests(@RequestBody List<String> rentBooksRequests) {
         List<RentBookRequest> rentBookRequests = new ArrayList<>();
         for (int i = 0; i < rentBooksRequests.size(); i++) {
             final String[] rentalData = rentBooksRequests.get(i).split(" ");
@@ -68,21 +92,7 @@ public class LibraryResource {
             RentBookRequest rentBookRequest = new RentBookRequest(bookId, daysRented);
             rentBookRequests.add(rentBookRequest);
         }
-
-        List<Rental> rentals = new ArrayList<>();
-        for (RentBookRequest rentBookRequest : rentBookRequests) {
-            Book book = bookRepository.findById(rentBookRequest.getBookId());
-            Rental rental = new Rental(book, rentBookRequest.getDaysRented());
-            rentals.add(rental);
-        }
-
-        String result = "Rental Record for " + customer.getName() + "\n";
-        result += format(rentals);
-        // add footer lines
-        result += "You owe " + getTotalAmount(rentals) + " $\n";
-        result += "You earned " + getFrequentRenterPoints(rentals) + " frequent renter points\n";
-
-        return List.of(result);
+        return rentBookRequests;
     }
 
     private Amount getTotalAmount(List<Rental> rentals) {
