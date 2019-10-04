@@ -3,6 +3,7 @@ package com.zihler.library;
 import com.zihler.library.adapters.file_persistance.FileBasedBookRepository;
 import com.zihler.library.domain.entities.Book;
 import com.zihler.library.domain.values.*;
+import com.zihler.library.domain.values.RentalRecord;
 import com.zihler.library.use_cases.rent_books.ports.RentBookRequest;
 import com.zihler.library.domain.values.Rental;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,12 +62,14 @@ public class LibraryResource {
         List<RentBookRequest> rentBookRequests = toRequests(rentBooksRequests);
 
         List<Rental> rentals = rentals(rentBookRequests);
+        List<Rental> rentals = getRentals(rentBookRequests);
+        RentalRecord rentalRecord = RentalRecord.from(customer, rentals);
 
-        String result = "Rental Record for " + customer.getName() + "\n";
-        result += format(rentals);
+        String result = "Rental Record for " + rentalRecord.getCustomerName() + "\n";
+        result += format(rentalRecord.getRentals());
         // add footer lines
-        result += "You owe " + getTotalAmount(rentals) + " $\n";
-        result += "You earned " + getFrequentRenterPoints(rentals) + " frequent renter points\n";
+        result += "You owe " + rentalRecord.getTotalAmount() + " $\n";
+        result += "You earned " + rentalRecord.getFrequentRenterPoints() + " frequent renter points\n";
 
         return List.of(result);
     }
