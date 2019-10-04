@@ -1,6 +1,7 @@
 package com.zihler.library;
 
 import com.zihler.library.adapters.file_persistance.FileBasedBookRepository;
+import com.zihler.library.adapters.rest.RestRentalRecordPresenter;
 import com.zihler.library.domain.entities.Book;
 import com.zihler.library.domain.values.*;
 import com.zihler.library.domain.values.RentalRecord;
@@ -64,13 +65,10 @@ public class LibraryResource {
         List<Rental> rentals = rentals(rentBookRequests);
         RentalRecord rentalRecord = RentalRecord.from(customer, rentals);
 
-        String result = "Rental Record for " + rentalRecord.customerName() + "\n";
-        result += format(rentalRecord.rentals());
-        // add footer lines
-        result += "You owe " + rentalRecord.totalAmount() + " $\n";
-        result += "You earned " + rentalRecord.frequentRenterPoints() + " frequent renter points\n";
+        RestRentalRecordPresenter restRentalRecordPresenter = new RestRentalRecordPresenter();
+        restRentalRecordPresenter.present(rentalRecord);
 
-        return List.of(result);
+        return restRentalRecordPresenter.presentation();
     }
 
     private List<Rental> rentals(List<RentBookRequest> rentBookRequests) {
