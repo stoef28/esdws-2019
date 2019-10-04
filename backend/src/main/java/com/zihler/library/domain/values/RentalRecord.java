@@ -1,7 +1,5 @@
 package com.zihler.library.domain.values;
 
-import com.zihler.library.Customer;
-
 import java.util.List;
 
 public class RentalRecord {
@@ -17,27 +15,29 @@ public class RentalRecord {
         return new RentalRecord(customer, rentals);
     }
 
-    public String getCustomerName() {
-        return customer.getName();
+    public CustomerName customerName() {
+        return customer.name();
     }
 
-    public double getTotalAmount() {
-        double totalAmount = 0;
+    public List<Rental> rentals() {
+        return rentals;
+    }
+
+    public Amount totalAmount() {
+        Amount totalAmount = Amount.of(0);
         for (Rental rental : rentals) {
-            totalAmount += rental.getAmount();
+            totalAmount.plus(rental.amount());
         }
         return totalAmount;
     }
 
-    public int getFrequentRenterPoints() {
-        int frequentRenterPoints = 0;
-        for (Rental rental : rentals) {
-            frequentRenterPoints += rental.getFrequentRenterPoints();
-        }
-        return frequentRenterPoints;
-    }
+    public FrequentRenterPoints frequentRenterPoints() {
+        FrequentRenterPoints frequentRenterPoints = FrequentRenterPoints.of(0);
 
-    public List<Rental> getRentals() {
-        return rentals;
+        for (Rental rental : rentals) {
+            frequentRenterPoints.plus(rental.frequentRenterPoints());
+        }
+
+        return frequentRenterPoints;
     }
 }

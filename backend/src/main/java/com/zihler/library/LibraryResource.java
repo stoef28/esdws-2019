@@ -53,8 +53,8 @@ public class LibraryResource {
         if (rentBooksRequests == null || rentBooksRequests.size() == 0) {
             throw new IllegalArgumentException("rent books requests cannot be null!");
         }
-        String customerName = rentBooksRequests.remove(0);
 
+        CustomerName customerName = CustomerName.from(rentBooksRequests.remove(0));
         // fetch customer
         Customer customer = customerRepository.findByUsername(customerName);
 
@@ -62,14 +62,13 @@ public class LibraryResource {
         List<RentBookRequest> rentBookRequests = toRequests(rentBooksRequests);
 
         List<Rental> rentals = rentals(rentBookRequests);
-        List<Rental> rentals = getRentals(rentBookRequests);
         RentalRecord rentalRecord = RentalRecord.from(customer, rentals);
 
-        String result = "Rental Record for " + rentalRecord.getCustomerName() + "\n";
-        result += format(rentalRecord.getRentals());
+        String result = "Rental Record for " + rentalRecord.customerName() + "\n";
+        result += format(rentalRecord.rentals());
         // add footer lines
-        result += "You owe " + rentalRecord.getTotalAmount() + " $\n";
-        result += "You earned " + rentalRecord.getFrequentRenterPoints() + " frequent renter points\n";
+        result += "You owe " + rentalRecord.totalAmount() + " $\n";
+        result += "You earned " + rentalRecord.frequentRenterPoints() + " frequent renter points\n";
 
         return List.of(result);
     }
@@ -84,7 +83,7 @@ public class LibraryResource {
         return rentals;
     }
 
-    private List<RentBookRequest> toRequests(@RequestBody List<String> rentBooksRequests) {
+    private List<RentBookRequest> toRequests(List<String> rentBooksRequests) {
         List<RentBookRequest> rentBookRequests = new ArrayList<>();
         for (int i = 0; i < rentBooksRequests.size(); i++) {
             final String[] rentalData = rentBooksRequests.get(i).split(" ");
@@ -96,24 +95,6 @@ public class LibraryResource {
             rentBookRequests.add(rentBookRequest);
         }
         return rentBookRequests;
-    }
-
-    private Amount getTotalAmount(List<Rental> rentals) {
-        Amount totalAmount = Amount.of(0);
-        for (Rental rental : rentals) {
-            totalAmount.plus(rental.amount());
-        }
-        return totalAmount;
-    }
-
-    private FrequentRenterPoints getFrequentRenterPoints(List<Rental> rentals) {
-        FrequentRenterPoints frequentRenterPoints = FrequentRenterPoints.of(0);
-
-        for (Rental rental : rentals) {
-            frequentRenterPoints.plus(rental.frequentRenterPoints());
-        }
-
-        return frequentRenterPoints;
     }
 
     private String format(List<Rental> rentals) {
