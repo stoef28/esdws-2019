@@ -1,17 +1,20 @@
 package com.zihler.library;
 
+import com.zihler.library.domain.values.Customer;
+import com.zihler.library.domain.values.CustomerName;
+
 import java.util.Map;
 
 public class InMemoryCustomerRepository {
-    private final Map<String, Customer> customers;
+    private final Map<CustomerName, Customer> customers;
 
     public InMemoryCustomerRepository() {
         customers = Map.of(
-                "AnyUser", new Customer("anyUser")
+                CustomerName.from("anyUser"), Customer.from(CustomerName.from("anyUser"))
         );
     }
 
-    public Customer findByUsername(String username) {
-        return customers.getOrDefault(username, new Customer(username));
+    public Customer findByUsername(CustomerName customerName) {
+        return customers.getOrDefault(customerName, Customer.from(customerName));
     }
 }

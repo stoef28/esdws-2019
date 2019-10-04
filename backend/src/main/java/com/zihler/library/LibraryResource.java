@@ -3,6 +3,7 @@ package com.zihler.library;
 import com.zihler.library.adapters.file_persistance.FileBasedBookRepository;
 import com.zihler.library.domain.entities.Book;
 import com.zihler.library.domain.values.*;
+import com.zihler.library.domain.values.RentalRecord;
 import com.zihler.library.use_cases.rent_books.ports.RentBookRequest;
 import com.zihler.library.domain.values.Rental;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,8 +53,8 @@ public class LibraryResource {
         if (rentBooksRequests == null || rentBooksRequests.size() == 0) {
             throw new IllegalArgumentException("rent books requests cannot be null!");
         }
-        String customerName = rentBooksRequests.remove(0);
 
+        CustomerName customerName = CustomerName.from(rentBooksRequests.remove(0));
         // fetch customer
         Customer customer = customerRepository.findByUsername(customerName);
 
@@ -61,12 +62,13 @@ public class LibraryResource {
         List<RentBookRequest> rentBookRequests = toRequests(rentBooksRequests);
 
         List<Rental> rentals = rentals(rentBookRequests);
+        RentalRecord rentalRecord = RentalRecord.from(customer, rentals);
 
-        String result = "Rental Record for " + customer.getName() + "\n";
-        result += format(rentals);
+        String result = "Rental Record for " + rentalRecord.customerName() + "\n";
+        result += format(rentalRecord.rentals());
         // add footer lines
-        result += "You owe " + getTotalAmount(rentals) + " $\n";
-        result += "You earned " + getFrequentRenterPoints(rentals) + " frequent renter points\n";
+        result += "You owe " + rentalRecord.totalAmount() + " $\n";
+        result += "You earned " + rentalRecord.frequentRenterPoints() + " frequent renter points\n";
 
         return List.of(result);
     }
@@ -93,24 +95,6 @@ public class LibraryResource {
             rentBookRequests.add(rentBookRequest);
         }
         return rentBookRequests;
-    }
-
-    private Amount getTotalAmount(List<Rental> rentals) {
-        Amount totalAmount = Amount.of(0);
-        for (Rental rental : rentals) {
-            totalAmount.plus(rental.amount());
-        }
-        return totalAmount;
-    }
-
-    private FrequentRenterPoints getFrequentRenterPoints(List<Rental> rentals) {
-        FrequentRenterPoints frequentRenterPoints = FrequentRenterPoints.of(0);
-
-        for (Rental rental : rentals) {
-            frequentRenterPoints.plus(rental.frequentRenterPoints());
-        }
-
-        return frequentRenterPoints;
     }
 
     private String format(List<Rental> rentals) {
