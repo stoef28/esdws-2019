@@ -81,7 +81,7 @@ public class LibraryResource {
         return rentals;
     }
 
-    private List<RentBookRequest> toRequests(@RequestBody List<String> rentBooksRequests) {
+    private List<RentBookRequest> toRequests(List<String> rentBooksRequests) {
         List<RentBookRequest> rentBookRequests = new ArrayList<>();
         for (int i = 0; i < rentBooksRequests.size(); i++) {
             final String[] rentalData = rentBooksRequests.get(i).split(" ");
