@@ -70,7 +70,7 @@ public class LibraryResource {
         return List.of(result);
     }
 
-    private List<RentBookRequest> getRentBookRequests(@RequestBody List<String> rentBooksRequests) {
+    private List<RentBookRequest> getRentBookRequests(List<String> rentBooksRequests) {
         List<RentBookRequest> rentBookRequests = new ArrayList<>();
         for (int i = 0; i < rentBooksRequests.size(); i++) {
             final String[] rentalData = rentBooksRequests.get(i).split(" ");
@@ -107,7 +107,7 @@ public class LibraryResource {
     }
 
     private String format(List<Rental> rentals) {
-        String result="";
+        String result = "";
         for (Rental rental : rentals) {
             // create figures for this rental
             result += "\t'" + rental.getBookTitle() + "' by '" + rental.getBookAuthors() + "' for " + rental.getDaysRented() + " days: \t" + rental.getAmount() + " $\n";
