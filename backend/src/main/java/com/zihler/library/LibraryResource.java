@@ -3,10 +3,8 @@ package com.zihler.library;
 import com.zihler.library.adapters.file_persistance.FileBasedBookRepository;
 import com.zihler.library.adapters.rest.RestRentalRecordPresenter;
 import com.zihler.library.domain.entities.Book;
-import com.zihler.library.domain.values.*;
-import com.zihler.library.domain.values.RentalRecord;
+import com.zihler.library.use_cases.rent_books.RentBooks;
 import com.zihler.library.use_cases.rent_books.ports.RentBookRequest;
-import com.zihler.library.domain.values.Rental;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.web.bind.annotation.*;
@@ -65,8 +63,12 @@ public class LibraryResource {
         List<Rental> rentals = rentals(rentBookRequests);
         RentalRecord rentalRecord = RentalRecord.from(customer, rentals);
 
+        List<RentBookRequest> rentBookRequests = getRentBookRequests(rentBooksRequests);
         RestRentalRecordPresenter restRentalRecordPresenter = new RestRentalRecordPresenter();
-        restRentalRecordPresenter.present(rentalRecord);
+
+        RentBooks rentBooks = new RentBooks(customerRepository, bookRepository);
+
+        rentBooks.execute(customerName, rentBookRequests, restRentalRecordPresenter);
 
         return restRentalRecordPresenter.presentation();
     }
@@ -102,6 +104,16 @@ public class LibraryResource {
             result += "\t'" + rental.bookTitle() + "' by '" + rental.bookAuthors() + "' for " + rental.daysRented() + " days: \t" + rental.amount() + " $\n";
         }
         return result;
+    }
+
+    private List<RentBookRequest> getRentBookRequests(List<String> rentBooksRequests) {
+        List<RentBookRequest> rentBookRequests = new ArrayList<>();
+        for (int i = 0; i < rentBooksRequests.size(); i++) {
+            final String[] rentalData = rentBooksRequests.get(i).split(" ");
+            RentBookRequest rentBookRequest = new RentBookRequest(Integer.parseInt(rentalData[0]), Integer.parseInt(rentalData[1]));
+            rentBookRequests.add(rentBookRequest);
+        }
+        return rentBookRequests;
     }
 
 }
