@@ -61,7 +61,7 @@ public class LibraryResource {
 
         RentBooks rentBooks = new RentBooks(customerRepository, bookRepository);
 
-        rentBooks.execute(customerName, rentBookRequests, restRentalRecordPresenter);
+        rentBooks.with(customerName, rentBookRequests, restRentalRecordPresenter);
 
         return restRentalRecordPresenter.presentation();
     }

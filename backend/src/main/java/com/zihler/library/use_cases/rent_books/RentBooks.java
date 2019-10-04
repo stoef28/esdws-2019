@@ -22,7 +22,7 @@ public class RentBooks {
         this.bookRepository = bookRepository;
     }
 
-    public void execute(CustomerName customerName, List<RentBookRequest> rentBookRequests, RestRentalRecordPresenter restRentalRecordPresenter) {
+    public void with(CustomerName customerName, List<RentBookRequest> rentBookRequests, RestRentalRecordPresenter restRentalRecordPresenter) {
         Customer customer = this.customerRepository.findByUsername(customerName);
         List<Rental> rentals = rentals(rentBookRequests);
         RentalRecord rentalRecord = RentalRecord.from(customer, rentals);
