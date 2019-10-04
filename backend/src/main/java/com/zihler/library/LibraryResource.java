@@ -3,6 +3,7 @@ package com.zihler.library;
 import com.zihler.library.adapters.file_persistance.FileBasedBookRepository;
 import com.zihler.library.adapters.rest.RestRentalRecordPresenter;
 import com.zihler.library.domain.entities.Book;
+import com.zihler.library.domain.values.*;
 import com.zihler.library.use_cases.rent_books.RentBooks;
 import com.zihler.library.use_cases.rent_books.ports.RentBookRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,16 +55,8 @@ public class LibraryResource {
         }
 
         CustomerName customerName = CustomerName.from(rentBooksRequests.remove(0));
-        // fetch customer
-        Customer customer = customerRepository.findByUsername(customerName);
-
-        // calculate fee, frequent renter points, and document to display in front end
         List<RentBookRequest> rentBookRequests = toRequests(rentBooksRequests);
 
-        List<Rental> rentals = rentals(rentBookRequests);
-        RentalRecord rentalRecord = RentalRecord.from(customer, rentals);
-
-        List<RentBookRequest> rentBookRequests = getRentBookRequests(rentBooksRequests);
         RestRentalRecordPresenter restRentalRecordPresenter = new RestRentalRecordPresenter();
 
         RentBooks rentBooks = new RentBooks(customerRepository, bookRepository);
@@ -71,16 +64,6 @@ public class LibraryResource {
         rentBooks.execute(customerName, rentBookRequests, restRentalRecordPresenter);
 
         return restRentalRecordPresenter.presentation();
-    }
-
-    private List<Rental> rentals(List<RentBookRequest> rentBookRequests) {
-        List<Rental> rentals = new ArrayList<>();
-        for (RentBookRequest rentBookRequest : rentBookRequests) {
-            Book book = bookRepository.findById(rentBookRequest.getBookId());
-            Rental rental = new Rental(book, rentBookRequest.getDaysRented());
-            rentals.add(rental);
-        }
-        return rentals;
     }
 
     private List<RentBookRequest> toRequests(List<String> rentBooksRequests) {
@@ -97,24 +80,6 @@ public class LibraryResource {
         return rentBookRequests;
     }
 
-    private String format(List<Rental> rentals) {
-        String result = "";
-        for (Rental rental : rentals) {
-            // create figures for this rental
-            result += "\t'" + rental.bookTitle() + "' by '" + rental.bookAuthors() + "' for " + rental.daysRented() + " days: \t" + rental.amount() + " $\n";
-        }
-        return result;
-    }
-
-    private List<RentBookRequest> getRentBookRequests(List<String> rentBooksRequests) {
-        List<RentBookRequest> rentBookRequests = new ArrayList<>();
-        for (int i = 0; i < rentBooksRequests.size(); i++) {
-            final String[] rentalData = rentBooksRequests.get(i).split(" ");
-            RentBookRequest rentBookRequest = new RentBookRequest(Integer.parseInt(rentalData[0]), Integer.parseInt(rentalData[1]));
-            rentBookRequests.add(rentBookRequest);
-        }
-        return rentBookRequests;
-    }
 
 }
 

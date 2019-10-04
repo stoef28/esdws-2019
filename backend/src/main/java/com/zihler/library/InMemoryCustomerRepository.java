@@ -1,6 +1,6 @@
 package com.zihler.library;
 
-import com.zihler.library.domain.values.Customer;
+import com.zihler.library.domain.entities.Customer;
 import com.zihler.library.domain.values.CustomerName;
 
 import java.util.Map;

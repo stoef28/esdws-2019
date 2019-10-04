@@ -1,4 +1,6 @@
-package com.zihler.library.domain.values;
+package com.zihler.library.domain.entities;
+
+import com.zihler.library.domain.values.CustomerName;
 
 public class Customer {
     private CustomerName name;

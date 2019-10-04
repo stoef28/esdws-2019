@@ -1,5 +1,7 @@
 package com.zihler.library.domain.values;
 
+import com.zihler.library.domain.entities.Customer;
+
 import java.util.List;
 
 public class RentalRecord {
