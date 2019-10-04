@@ -3,9 +3,8 @@ package com.zihler.library;
 import com.zihler.library.adapters.file_persistance.FileBasedBookRepository;
 import com.zihler.library.adapters.rest.RestRentalRecordPresenter;
 import com.zihler.library.domain.entities.Book;
-import com.zihler.library.domain.values.RentalRecord;
+import com.zihler.library.use_cases.rent_books.RentBooks;
 import com.zihler.library.use_cases.rent_books.ports.RentBookRequest;
-import com.zihler.library.domain.values.Rental;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.web.bind.annotation.*;
@@ -55,17 +54,12 @@ public class LibraryResource {
         }
         String customerName = rentBooksRequests.remove(0);
 
-        // fetch customer
-        Customer customer = customerRepository.findByUsername(customerName);
-
-        // calculate fee, frequent renter points, and document to display in front end
         List<RentBookRequest> rentBookRequests = getRentBookRequests(rentBooksRequests);
-
-        List<Rental> rentals = getRentals(rentBookRequests);
-        RentalRecord rentalRecord = RentalRecord.from(customer, rentals);
-
         RestRentalRecordPresenter restRentalRecordPresenter = new RestRentalRecordPresenter();
-        restRentalRecordPresenter.present(rentalRecord);
+
+        RentBooks rentBooks = new RentBooks(customerRepository, bookRepository);
+
+        rentBooks.execute(customerName, rentBookRequests, restRentalRecordPresenter);
 
         return restRentalRecordPresenter.presentation();
     }
@@ -78,16 +72,6 @@ public class LibraryResource {
             rentBookRequests.add(rentBookRequest);
         }
         return rentBookRequests;
-    }
-
-    private List<Rental> getRentals(List<RentBookRequest> rentBookRequests) {
-        List<Rental> rentals = new ArrayList<>();
-        for (RentBookRequest rentBookRequest : rentBookRequests) {
-            Book book = bookRepository.findById(rentBookRequest.getBookId());
-            Rental rental = new Rental(book, rentBookRequest.getDaysRented());
-            rentals.add(rental);
-        }
-        return rentals;
     }
 
 }
