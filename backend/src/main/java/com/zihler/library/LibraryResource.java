@@ -6,6 +6,7 @@ import com.zihler.library.domain.entities.Book;
 import com.zihler.library.domain.values.*;
 import com.zihler.library.use_cases.rent_books.RentBooks;
 import com.zihler.library.use_cases.rent_books.ports.RentBookRequest;
+import com.zihler.library.use_cases.rent_books.ports.RentBooksRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.web.bind.annotation.*;
@@ -56,12 +57,11 @@ public class LibraryResource {
 
         CustomerName customerName = CustomerName.from(rentBooksRequests.remove(0));
         List<RentBookRequest> rentBookRequests = toRequests(rentBooksRequests);
+        RentBooksRequest rentBooksRequest = RentBooksRequest.from(customerName, rentBookRequests);
 
         RestRentalRecordPresenter restRentalRecordPresenter = new RestRentalRecordPresenter();
-
         RentBooks rentBooks = new RentBooks(customerRepository, bookRepository);
-
-        rentBooks.with(customerName, rentBookRequests, restRentalRecordPresenter);
+        rentBooks.with(rentBooksRequest, restRentalRecordPresenter);
 
         return restRentalRecordPresenter.presentation();
     }

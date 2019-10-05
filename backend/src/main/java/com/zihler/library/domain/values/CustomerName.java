@@ -3,7 +3,7 @@ package com.zihler.library.domain.values;
 public class CustomerName {
     private String name;
 
-    public CustomerName(String name) {
+    private CustomerName(String name) {
         this.name = name;
     }
 
