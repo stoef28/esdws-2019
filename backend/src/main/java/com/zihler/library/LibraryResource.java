@@ -4,6 +4,7 @@ import com.zihler.library.adapters.file_persistance.FileBasedBookRepository;
 import com.zihler.library.adapters.rest.RestRentalRecordPresenter;
 import com.zihler.library.domain.entities.Book;
 import com.zihler.library.use_cases.rent_books.RentBooks;
+import com.zihler.library.use_cases.rent_books.RentBooksInput;
 import com.zihler.library.use_cases.rent_books.ports.RentBookRequest;
 import com.zihler.library.use_cases.rent_books.ports.RentBooksRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,10 +57,11 @@ public class LibraryResource {
         String customerName = rentBooksRequests.remove(0);
         List<RentBookRequest> rentBookRequests = getRentBookRequests(rentBooksRequests);
         RentBooksRequest rentBooksRequest = RentBooksRequest.from(customerName, rentBookRequests);
+        RentBooksInput rentBooksInput = new RentBooksInput(bookRepository, rentBooksRequest);
 
         RestRentalRecordPresenter restRentalRecordPresenter = new RestRentalRecordPresenter();
-        RentBooks rentBooks = new RentBooks(customerRepository, bookRepository);
-        rentBooks.executeWith(rentBooksRequest, restRentalRecordPresenter);
+        RentBooks rentBooks = new RentBooks(customerRepository);
+        rentBooks.executeWith(rentBooksInput, restRentalRecordPresenter);
 
         return restRentalRecordPresenter.presentation();
     }
