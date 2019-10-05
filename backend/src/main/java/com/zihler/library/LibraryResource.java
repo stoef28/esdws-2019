@@ -36,7 +36,7 @@ public class LibraryResource {
         final List<String[]> books = new ArrayList<>();
         for (Book book : bookRepository.getAllBooks()) {
             books.add(new String[]{
-                    book.getId(),
+                    String.valueOf(book.getId()),
                     book.getTitle(),
                     book.getAuthors(),
                     book.getReadingMode(),
