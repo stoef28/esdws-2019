@@ -17,11 +17,11 @@ public class RentalRecord {
         return new RentalRecord(customer, rentals);
     }
 
-    public String getCustomerName() {
+    String getCustomerName() {
         return customer.getName();
     }
 
-    public double getTotalAmount() {
+    double getTotalAmount() {
         double totalAmount = 0;
         for (Rental rental : rentals) {
             totalAmount += rental.getAmount();
@@ -29,7 +29,7 @@ public class RentalRecord {
         return totalAmount;
     }
 
-    public int getFrequentRenterPoints() {
+    int getFrequentRenterPoints() {
         int frequentRenterPoints = 0;
         for (Rental rental : rentals) {
             frequentRenterPoints += rental.getFrequentRenterPoints();
@@ -37,7 +37,11 @@ public class RentalRecord {
         return frequentRenterPoints;
     }
 
-    public List<Rental> getRentals() {
+    List<Rental> getRentals() {
         return rentals;
+    }
+
+    public RentalRecordDocument asDocument() {
+        return RentalRecordDocument.from(this);
     }
 }

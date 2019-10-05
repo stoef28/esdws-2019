@@ -5,6 +5,7 @@ import com.zihler.library.InMemoryCustomerRepository;
 import com.zihler.library.adapters.rest.RestRentalRecordPresenter;
 import com.zihler.library.domain.values.Rental;
 import com.zihler.library.domain.values.RentalRecord;
+import com.zihler.library.domain.values.RentalRecordDocument;
 
 import java.util.List;
 
@@ -19,7 +20,8 @@ public class RentBooks {
         Customer customer = this.customerRepository.findByUsername(input.getCustomerName());
         List<Rental> rentals = input.getRentals();
         RentalRecord rentalRecord = RentalRecord.from(customer, rentals);
-        restRentalRecordPresenter.present(rentalRecord);
+        RentalRecordDocument rentalRecordDocument = rentalRecord.asDocument();
+        restRentalRecordPresenter.present(rentalRecordDocument);
     }
 
 }
