@@ -1,6 +1,6 @@
 package com.zihler.library.application.use_cases.rent_books.ports;
 
-import com.zihler.library.adapters.file_persistance.FileBasedBookRepository;
+import com.zihler.library.application.outbound_ports.persistence.BookRepository;
 import com.zihler.library.domain.entities.Book;
 import com.zihler.library.domain.values.Rental;
 
@@ -9,9 +9,9 @@ import java.util.List;
 
 public class RentBooksInput {
     private final RentBooksRequest rentBooksRequest;
-    private FileBasedBookRepository bookRepository;
+    private BookRepository bookRepository;
 
-    public RentBooksInput(FileBasedBookRepository bookRepository, RentBooksRequest rentBooksRequest) {
+    public RentBooksInput(BookRepository bookRepository, RentBooksRequest rentBooksRequest) {
         this.rentBooksRequest = rentBooksRequest;
         this.bookRepository = bookRepository;
     }
