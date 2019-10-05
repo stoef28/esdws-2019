@@ -1,4 +1,4 @@
-package com.zihler.library.use_cases.rent_books.ports;
+package com.zihler.library.application.use_cases.rent_books.ports;
 
 import com.zihler.library.domain.values.CustomerName;
 
@@ -17,11 +17,11 @@ public class RentBooksRequest {
         return new RentBooksRequest(customerName, rentBookRequests);
     }
 
-    public CustomerName getCustomerName() {
+    CustomerName getCustomerName() {
         return customerName;
     }
 
-    public List<RentBookRequest> getRentBookRequests() {
+    List<RentBookRequest> getRentBookRequests() {
         return rentBookRequests;
     }
 }

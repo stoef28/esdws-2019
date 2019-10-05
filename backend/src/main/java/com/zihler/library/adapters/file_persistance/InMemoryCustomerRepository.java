@@ -1,4 +1,4 @@
-package com.zihler.library;
+package com.zihler.library.adapters.file_persistance;
 
 import com.zihler.library.domain.entities.Customer;
 import com.zihler.library.domain.values.CustomerName;

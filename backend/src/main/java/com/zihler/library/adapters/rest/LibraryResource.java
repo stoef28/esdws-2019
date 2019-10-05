@@ -1,15 +1,15 @@
-package com.zihler.library;
+package com.zihler.library.adapters.rest;
 
+import com.zihler.library.adapters.file_persistance.InMemoryCustomerRepository;
 import com.zihler.library.adapters.file_persistance.FileBasedBookRepository;
-import com.zihler.library.adapters.rest.RestRentalRecordPresenter;
 import com.zihler.library.domain.entities.Book;
 import com.zihler.library.domain.values.BookId;
 import com.zihler.library.domain.values.CustomerName;
 import com.zihler.library.domain.values.DaysRented;
-import com.zihler.library.use_cases.rent_books.RentBooks;
-import com.zihler.library.use_cases.rent_books.ports.RentBookRequest;
-import com.zihler.library.use_cases.rent_books.ports.RentBooksInput;
-import com.zihler.library.use_cases.rent_books.ports.RentBooksRequest;
+import com.zihler.library.application.use_cases.rent_books.RentBooks;
+import com.zihler.library.application.use_cases.rent_books.ports.RentBookRequest;
+import com.zihler.library.application.use_cases.rent_books.ports.RentBooksInput;
+import com.zihler.library.application.use_cases.rent_books.ports.RentBooksRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.web.bind.annotation.*;

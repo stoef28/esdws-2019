@@ -1,4 +1,4 @@
-package com.zihler.library.use_cases.rent_books.ports;
+package com.zihler.library.application.use_cases.rent_books.ports;
 
 import com.zihler.library.domain.values.BookId;
 import com.zihler.library.domain.values.DaysRented;
@@ -16,11 +16,11 @@ public class RentBookRequest {
         return new RentBookRequest(bookId, daysRented);
     }
 
-    public BookId getBookId() {
+    BookId getBookId() {
         return bookId;
     }
 
-    public DaysRented getDaysRented() {
+    DaysRented getDaysRented() {
         return daysRented;
     }
 }
