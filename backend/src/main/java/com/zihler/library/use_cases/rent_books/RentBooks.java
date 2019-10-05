@@ -8,6 +8,7 @@ import com.zihler.library.domain.entities.Book;
 import com.zihler.library.domain.values.Rental;
 import com.zihler.library.domain.values.RentalRecord;
 import com.zihler.library.use_cases.rent_books.ports.RentBookRequest;
+import com.zihler.library.use_cases.rent_books.ports.RentBooksRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,9 +22,9 @@ public class RentBooks {
         this.bookRepository = bookRepository;
     }
 
-    public void executeWith(String customerName, List<RentBookRequest> rentBookRequests, RestRentalRecordPresenter restRentalRecordPresenter) {
-        Customer customer = this.customerRepository.findByUsername(customerName);
-        List<Rental> rentals = getRentals(rentBookRequests);
+    public void executeWith(RentBooksRequest rentBooksRequest, RestRentalRecordPresenter restRentalRecordPresenter) {
+        Customer customer = this.customerRepository.findByUsername(rentBooksRequest.getCustomerName());
+        List<Rental> rentals = getRentals(rentBooksRequest.getRentBookRequests());
         RentalRecord rentalRecord = RentalRecord.from(customer, rentals);
         restRentalRecordPresenter.present(rentalRecord);
     }

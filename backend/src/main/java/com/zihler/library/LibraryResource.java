@@ -5,6 +5,7 @@ import com.zihler.library.adapters.rest.RestRentalRecordPresenter;
 import com.zihler.library.domain.entities.Book;
 import com.zihler.library.use_cases.rent_books.RentBooks;
 import com.zihler.library.use_cases.rent_books.ports.RentBookRequest;
+import com.zihler.library.use_cases.rent_books.ports.RentBooksRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.web.bind.annotation.*;
@@ -53,14 +54,12 @@ public class LibraryResource {
             throw new IllegalArgumentException("rent books requests cannot be null!");
         }
         String customerName = rentBooksRequests.remove(0);
-
         List<RentBookRequest> rentBookRequests = getRentBookRequests(rentBooksRequests);
+        RentBooksRequest rentBooksRequest = RentBooksRequest.from(customerName, rentBookRequests);
 
         RestRentalRecordPresenter restRentalRecordPresenter = new RestRentalRecordPresenter();
-
         RentBooks rentBooks = new RentBooks(customerRepository, bookRepository);
-
-        rentBooks.executeWith(customerName, rentBookRequests, restRentalRecordPresenter);
+        rentBooks.executeWith(rentBooksRequest, restRentalRecordPresenter);
 
         return restRentalRecordPresenter.presentation();
     }
