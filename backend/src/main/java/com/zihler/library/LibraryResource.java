@@ -4,7 +4,7 @@ import com.zihler.library.adapters.file_persistance.FileBasedBookRepository;
 import com.zihler.library.adapters.rest.RestRentalRecordPresenter;
 import com.zihler.library.domain.entities.Book;
 import com.zihler.library.use_cases.rent_books.RentBooks;
-import com.zihler.library.use_cases.rent_books.RentBooksInput;
+import com.zihler.library.use_cases.rent_books.ports.RentBooksInput;
 import com.zihler.library.use_cases.rent_books.ports.RentBookRequest;
 import com.zihler.library.use_cases.rent_books.ports.RentBooksRequest;
 import org.springframework.beans.factory.annotation.Autowired;

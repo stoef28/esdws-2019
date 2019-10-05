@@ -1,4 +1,4 @@
-package com.zihler.library.use_cases.rent_books;
+package com.zihler.library.use_cases.rent_books.ports;
 
 import com.zihler.library.adapters.file_persistance.FileBasedBookRepository;
 import com.zihler.library.domain.entities.Book;
@@ -18,11 +18,11 @@ public class RentBooksInput {
         this.bookRepository = bookRepository;
     }
 
-    String getCustomerName() {
+    public String getCustomerName() {
         return rentBooksRequest.getCustomerName();
     }
 
-    List<Rental> getRentals() {
+    public List<Rental> getRentals() {
         List<Rental> rentals = new ArrayList<>();
         for (RentBookRequest rentBookRequest : rentBooksRequest.getRentBookRequests()) {
             Book book = this.bookRepository.findById(rentBookRequest.getBookId());
