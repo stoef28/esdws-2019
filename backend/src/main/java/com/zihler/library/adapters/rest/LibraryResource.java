@@ -65,7 +65,7 @@ public class LibraryResource {
         RentBooksRequest rentBooksRequest = RentBooksRequest.from(customerName, rentBookRequests);
         RentBooksInput rentBooksInput = new RentBooksInput(bookRepository, rentBooksRequest);
 
-        RestRentalRecordPresenter restRentalRecordPresenter = new RestRentalRecordPresenter();
+        RestIPresentRentalRecords restRentalRecordPresenter = new RestIPresentRentalRecords();
         IRentBooks iRentBooks = new RentBooks(customerRepository);
         iRentBooks.with(rentBooksInput, restRentalRecordPresenter);
 

@@ -1,7 +1,7 @@
 package com.zihler.library.application.use_cases.rent_books;
 
-import com.zihler.library.adapters.rest.RestRentalRecordPresenter;
 import com.zihler.library.application.outbound_ports.persistance.IFindCustomers;
+import com.zihler.library.application.outbound_ports.presentation.IPresentRentalRecords;
 import com.zihler.library.application.use_cases.rent_books.ports.IRentBooks;
 import com.zihler.library.domain.entities.Customer;
 import com.zihler.library.domain.values.Rental;
@@ -19,12 +19,12 @@ public class RentBooks implements IRentBooks {
     }
 
     @Override
-    public void with(RentBooksInput rentBooksInput, RestRentalRecordPresenter restRentalRecordPresenter) {
+    public void with(RentBooksInput rentBooksInput, IPresentRentalRecords IPresentRentalRecords) {
         Customer customer = iFindCustomers.byName(rentBooksInput.customerName());
         List<Rental> rentals = rentBooksInput.rentals();
         RentalRecord rentalRecord = RentalRecord.from(customer, rentals);
         RentalRecordDocument rentalRecordDocument = rentalRecord.asDocument();
-        restRentalRecordPresenter.present(rentalRecordDocument);
+        IPresentRentalRecords.present(rentalRecordDocument);
     }
 
 }

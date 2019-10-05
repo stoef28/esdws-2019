@@ -1,18 +1,18 @@
 package com.zihler.library.adapters.rest;
 
-import com.zihler.library.domain.values.Rental;
+import com.zihler.library.application.outbound_ports.presentation.IPresentRentalRecords;
 import com.zihler.library.domain.values.RentalDocument;
-import com.zihler.library.domain.values.RentalRecord;
 import com.zihler.library.domain.values.RentalRecordDocument;
 
 import java.util.List;
 
-public class RestRentalRecordPresenter {
+public class RestIPresentRentalRecords implements IPresentRentalRecords {
     private List<String> restRentalRecord;
 
-    public RestRentalRecordPresenter() {
+    RestIPresentRentalRecords() {
     }
 
+    @Override
     public void present(RentalRecordDocument rentalRecordDocument) {
         String result = "Rental Record for " + rentalRecordDocument.customerName() + "\n";
         result += format(rentalRecordDocument.rentals());
@@ -32,7 +32,7 @@ public class RestRentalRecordPresenter {
         return result;
     }
 
-    public List<String> presentation() {
+    List<String> presentation() {
         return restRentalRecord;
     }
 }
