@@ -1,5 +1,7 @@
 package com.zihler.library.adapters.file_persistance;
 
+import com.zihler.library.application.outbound_ports.persistance.IRetrieveAllBooks;
+import com.zihler.library.application.outbound_ports.persistance.IRetrieveSingleBooks;
 import com.zihler.library.domain.entities.Book;
 import com.zihler.library.domain.values.*;
 import org.springframework.core.io.ResourceLoader;
@@ -13,7 +15,7 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
-public class FileBasedBookRepository {
+public class FileBasedBookRepository implements IRetrieveAllBooks, IRetrieveSingleBooks {
     private final List<Book> books;
 
     public FileBasedBookRepository(ResourceLoader resourceLoader) throws IOException {
@@ -37,11 +39,13 @@ public class FileBasedBookRepository {
         }
     }
 
-    public List<Book> allBooks() {
+    @Override
+    public List<Book> retrieveAllBooks() {
         return books;
     }
 
-    public Book findById(BookId id) {
-        return allBooks().get(id.asInt());
+    @Override
+    public Book byId(BookId id) {
+        return retrieveAllBooks().get(id.asInt());
     }
 }
