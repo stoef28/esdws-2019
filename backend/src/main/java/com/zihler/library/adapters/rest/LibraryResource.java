@@ -2,6 +2,7 @@ package com.zihler.library.adapters.rest;
 
 import com.zihler.library.adapters.file_persistance.InMemoryCustomerRepository;
 import com.zihler.library.adapters.file_persistance.FileBasedBookRepository;
+import com.zihler.library.application.outbound_ports.persistance.IFindCustomers;
 import com.zihler.library.domain.entities.Book;
 import com.zihler.library.domain.values.BookId;
 import com.zihler.library.domain.values.CustomerName;
@@ -25,7 +26,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 @RequestMapping("api/library")
 public class LibraryResource {
     private FileBasedBookRepository bookRepository;
-    private InMemoryCustomerRepository customerRepository;
+    private IFindCustomers customerRepository;
 
     @Autowired
     public LibraryResource(ResourceLoader resourceLoader) throws IOException {
