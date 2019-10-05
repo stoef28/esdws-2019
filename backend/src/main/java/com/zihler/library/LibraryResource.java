@@ -57,6 +57,21 @@ public class LibraryResource {
         // fetch customer
         Customer customer = customerRepository.findByUsername(customerName);
 
+        // fetch books
+        final BufferedReader bufferedReader = new BufferedReader(
+                new InputStreamReader(
+                        resourceLoader.getResource("classpath:books.csv").getInputStream(),
+                        StandardCharsets.UTF_8
+                )
+        );
+        List<Book> books = new ArrayList<>();
+        while (bufferedReader.ready()) {
+            final String line = bufferedReader.readLine();
+            final String[] bookData = line.split(";");
+            Book book = new Book(Integer.parseInt(bookData[0]), bookData[2], bookData[1], bookData[3], bookData[4]);
+            books.add(book);
+        }
+
         // calculate fee, frequent renter points, and document to display in front end
         double totalAmount = 0;
         int frequentRenterPoints = 0;
