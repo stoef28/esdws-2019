@@ -11,7 +11,7 @@ import java.util.List;
 
 public class RentBooksInput {
     private final RentBooksRequest rentBooksRequest;
-    public FileBasedBookRepository bookRepository;
+    private FileBasedBookRepository bookRepository;
 
     public RentBooksInput(FileBasedBookRepository bookRepository, RentBooksRequest rentBooksRequest) {
         this.rentBooksRequest = rentBooksRequest;
