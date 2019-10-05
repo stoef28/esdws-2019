@@ -55,11 +55,12 @@ public class LibraryResource {
         String customerName = rentBooksRequests.remove(0);
 
         List<RentBookRequest> rentBookRequests = getRentBookRequests(rentBooksRequests);
+
         RestRentalRecordPresenter restRentalRecordPresenter = new RestRentalRecordPresenter();
 
         RentBooks rentBooks = new RentBooks(customerRepository, bookRepository);
 
-        rentBooks.execute(customerName, rentBookRequests, restRentalRecordPresenter);
+        rentBooks.executeWith(customerName, rentBookRequests, restRentalRecordPresenter);
 
         return restRentalRecordPresenter.presentation();
     }
