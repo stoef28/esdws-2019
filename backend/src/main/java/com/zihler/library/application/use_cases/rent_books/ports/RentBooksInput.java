@@ -1,4 +1,4 @@
-package com.zihler.library.application.rent_books.ports;
+package com.zihler.library.application.use_cases.rent_books.ports;
 
 import com.zihler.library.adapters.file_persistance.FileBasedBookRepository;
 import com.zihler.library.domain.entities.Book;
