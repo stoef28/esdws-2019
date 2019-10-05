@@ -3,6 +3,7 @@ package com.zihler.library.adapters.rest;
 import com.zihler.library.adapters.file_persistance.InMemoryCustomerRepository;
 import com.zihler.library.adapters.file_persistance.FileBasedBookRepository;
 import com.zihler.library.application.outbound_ports.persistance.IFindCustomers;
+import com.zihler.library.application.use_cases.rent_books.ports.IRentBooks;
 import com.zihler.library.domain.entities.Book;
 import com.zihler.library.domain.values.BookId;
 import com.zihler.library.domain.values.CustomerName;
@@ -65,8 +66,8 @@ public class LibraryResource {
         RentBooksInput rentBooksInput = new RentBooksInput(bookRepository, rentBooksRequest);
 
         RestRentalRecordPresenter restRentalRecordPresenter = new RestRentalRecordPresenter();
-        RentBooks rentBooks = new RentBooks(customerRepository);
-        rentBooks.with(rentBooksInput, restRentalRecordPresenter);
+        IRentBooks iRentBooks = new RentBooks(customerRepository);
+        iRentBooks.with(rentBooksInput, restRentalRecordPresenter);
 
         return restRentalRecordPresenter.presentation();
     }
