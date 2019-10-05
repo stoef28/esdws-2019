@@ -1,6 +1,6 @@
 package com.zihler.library.domain.values;
 
-import com.zihler.library.Customer;
+import com.zihler.library.domain.entities.Customer;
 
 import java.util.List;
 

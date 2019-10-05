@@ -1,7 +1,9 @@
-package com.zihler.library;
+package com.zihler.library.adapters.rest;
 
 import com.zihler.library.adapters.file_persistance.FileBasedBookRepository;
+import com.zihler.library.adapters.in_memory_persistence.InMemoryCustomerRepository;
 import com.zihler.library.adapters.rest.RestRentalRecordPresenter;
+import com.zihler.library.application.outbound_ports.persistence.CustomerRepository;
 import com.zihler.library.application.use_cases.rent_books.ports.IRentBooks;
 import com.zihler.library.domain.entities.Book;
 import com.zihler.library.application.use_cases.rent_books.RentBooks;
@@ -23,7 +25,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 @RequestMapping("api/library")
 public class LibraryResource {
     private FileBasedBookRepository bookRepository;
-    private InMemoryCustomerRepository customerRepository;
+    private CustomerRepository customerRepository;
 
     @Autowired
     public LibraryResource(ResourceLoader resourceLoader) throws IOException {

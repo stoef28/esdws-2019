@@ -1,7 +1,7 @@
 package com.zihler.library.application.use_cases.rent_books;
 
-import com.zihler.library.Customer;
-import com.zihler.library.InMemoryCustomerRepository;
+import com.zihler.library.domain.entities.Customer;
+import com.zihler.library.application.outbound_ports.persistence.CustomerRepository;
 import com.zihler.library.application.outbound_ports.presentation.RentalRecordPresenter;
 import com.zihler.library.application.use_cases.rent_books.ports.IRentBooks;
 import com.zihler.library.domain.values.Rental;
@@ -12,9 +12,9 @@ import com.zihler.library.application.use_cases.rent_books.ports.RentBooksInput;
 import java.util.List;
 
 public class RentBooks implements IRentBooks {
-    private final InMemoryCustomerRepository customerRepository;
+    private final CustomerRepository customerRepository;
 
-    public RentBooks(InMemoryCustomerRepository customerRepository) {
+    public RentBooks(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
     }
 
