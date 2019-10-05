@@ -13,19 +13,19 @@ public class Rental {
         this.daysRented = daysRented;
     }
 
-    public DaysRented daysRented() {
+    DaysRented daysRented() {
         return daysRented;
     }
 
-    public Authors bookAuthors() {
+    Authors bookAuthors() {
         return book.authors();
     }
 
-    public Title bookTitle() {
+    Title bookTitle() {
         return book.title();
     }
 
-    public FrequentRenterPoints frequentRenterPoints() {
+    FrequentRenterPoints frequentRenterPoints() {
         // add bonus for a reading mode "both"
         if (book.readingMode().equals(BOTH) && daysRented.asInt() > 1) {
             return FrequentRenterPoints.of(2);
@@ -33,7 +33,7 @@ public class Rental {
         return FrequentRenterPoints.of(1);
     }
 
-    public Amount amount() {
+    Amount amount() {
         Amount amount = Amount.of(0);
         switch (book.readingMode()) {
             case IMAGE:
@@ -53,5 +53,9 @@ public class Rental {
                 break;
         }
         return amount;
+    }
+
+    RentalDocument asDocument() {
+        return RentalDocument.from(this);
     }
 }

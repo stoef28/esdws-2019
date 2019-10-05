@@ -1,7 +1,9 @@
 package com.zihler.library.adapters.rest;
 
 import com.zihler.library.domain.values.Rental;
+import com.zihler.library.domain.values.RentalDocument;
 import com.zihler.library.domain.values.RentalRecord;
+import com.zihler.library.domain.values.RentalRecordDocument;
 
 import java.util.List;
 
@@ -11,19 +13,19 @@ public class RestRentalRecordPresenter {
     public RestRentalRecordPresenter() {
     }
 
-    public void present(RentalRecord rentalRecord) {
-        String result = "Rental Record for " + rentalRecord.customerName() + "\n";
-        result += format(rentalRecord.rentals());
+    public void present(RentalRecordDocument rentalRecordDocument) {
+        String result = "Rental Record for " + rentalRecordDocument.customerName() + "\n";
+        result += format(rentalRecordDocument.rentals());
         // add footer lines
-        result += "You owe " + rentalRecord.totalAmount() + " $\n";
-        result += "You earned " + rentalRecord.frequentRenterPoints() + " frequent renter points\n";
+        result += "You owe " + rentalRecordDocument.totalAmount() + " $\n";
+        result += "You earned " + rentalRecordDocument.frequentRenterPoints() + " frequent renter points\n";
 
         this.restRentalRecord = List.of(result);
     }
 
-    private String format(List<Rental> rentals) {
+    private String format(List<RentalDocument> rentals) {
         String result = "";
-        for (Rental rental : rentals) {
+        for (RentalDocument rental : rentals) {
             // create figures for this rental
             result += "\t'" + rental.bookTitle() + "' by '" + rental.bookAuthors() + "' for " + rental.daysRented() + " days: \t" + rental.amount() + " $\n";
         }

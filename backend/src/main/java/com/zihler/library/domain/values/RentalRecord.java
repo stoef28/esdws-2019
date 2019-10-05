@@ -17,15 +17,15 @@ public class RentalRecord {
         return new RentalRecord(customer, rentals);
     }
 
-    public CustomerName customerName() {
+    CustomerName customerName() {
         return customer.name();
     }
 
-    public List<Rental> rentals() {
+    List<Rental> rentals() {
         return rentals;
     }
 
-    public Amount totalAmount() {
+    Amount totalAmount() {
         Amount totalAmount = Amount.of(0);
         for (Rental rental : rentals) {
             totalAmount.plus(rental.amount());
@@ -33,7 +33,7 @@ public class RentalRecord {
         return totalAmount;
     }
 
-    public FrequentRenterPoints frequentRenterPoints() {
+    FrequentRenterPoints frequentRenterPoints() {
         FrequentRenterPoints frequentRenterPoints = FrequentRenterPoints.of(0);
 
         for (Rental rental : rentals) {
@@ -41,5 +41,9 @@ public class RentalRecord {
         }
 
         return frequentRenterPoints;
+    }
+
+    public RentalRecordDocument asDocument() {
+        return RentalRecordDocument.from(this);
     }
 }
