@@ -1,4 +1,4 @@
-package com.zihler.library.use_cases.rent_books.ports;
+package com.zihler.library.application.rent_books.ports;
 
 public class RentBookRequest {
     private final int bookId;
@@ -9,11 +9,11 @@ public class RentBookRequest {
         this.daysRented = daysRented;
     }
 
-    public int getBookId() {
+    int getBookId() {
         return bookId;
     }
 
-    public int getDaysRented() {
+    int getDaysRented() {
         return daysRented;
     }
 }

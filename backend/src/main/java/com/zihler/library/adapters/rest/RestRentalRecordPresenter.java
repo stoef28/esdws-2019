@@ -1,16 +1,18 @@
 package com.zihler.library.adapters.rest;
 
+import com.zihler.library.application.outbound_ports.presentation.RentalRecordPresenter;
 import com.zihler.library.domain.values.RentalDocument;
 import com.zihler.library.domain.values.RentalRecordDocument;
 
 import java.util.List;
 
-public class RestRentalRecordPresenter {
+public class RestRentalRecordPresenter implements RentalRecordPresenter {
     private List<String> restRentalRecord;
 
     public RestRentalRecordPresenter() {
     }
 
+    @Override
     public void present(RentalRecordDocument rentalRecord) {
         String result = "Rental Record for " + rentalRecord.getCustomerName() + "\n";
         result += format(rentalRecord.getRentals());

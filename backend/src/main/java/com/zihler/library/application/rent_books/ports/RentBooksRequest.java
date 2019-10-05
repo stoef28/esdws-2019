@@ -1,4 +1,4 @@
-package com.zihler.library.use_cases.rent_books.ports;
+package com.zihler.library.application.rent_books.ports;
 
 import java.util.List;
 
@@ -15,11 +15,11 @@ public class RentBooksRequest {
         return new RentBooksRequest(customerName, rentBookRequests);
     }
 
-    public String getCustomerName() {
+    String getCustomerName() {
         return customerName;
     }
 
-    public List<RentBookRequest> getRentBookRequests() {
+    List<RentBookRequest> getRentBookRequests() {
         return rentBookRequests;
     }
 }

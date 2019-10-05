@@ -1,10 +1,8 @@
-package com.zihler.library.use_cases.rent_books.ports;
+package com.zihler.library.application.rent_books.ports;
 
 import com.zihler.library.adapters.file_persistance.FileBasedBookRepository;
 import com.zihler.library.domain.entities.Book;
 import com.zihler.library.domain.values.Rental;
-import com.zihler.library.use_cases.rent_books.ports.RentBookRequest;
-import com.zihler.library.use_cases.rent_books.ports.RentBooksRequest;
 
 import java.util.ArrayList;
 import java.util.List;
