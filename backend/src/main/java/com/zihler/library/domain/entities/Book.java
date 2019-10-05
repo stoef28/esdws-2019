@@ -7,7 +7,7 @@ public class Book {
     private final String readingMode;
     private final String thumbnailLink;
 
-    public Book(int id, String title, String authors, String readingMode, String thumbnailLink) {
+    public Book(int id, String authors, String title, String readingMode, String thumbnailLink) {
         this.id = id;
         this.title = title;
         this.authors = authors;
