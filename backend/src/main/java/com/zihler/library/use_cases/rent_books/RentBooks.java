@@ -6,6 +6,7 @@ import com.zihler.library.adapters.rest.RestRentalRecordPresenter;
 import com.zihler.library.domain.values.Rental;
 import com.zihler.library.domain.values.RentalRecord;
 import com.zihler.library.domain.values.RentalRecordDocument;
+import com.zihler.library.use_cases.rent_books.ports.RentBooksInput;
 
 import java.util.List;
 
