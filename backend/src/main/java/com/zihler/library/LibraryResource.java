@@ -67,7 +67,7 @@ public class LibraryResource {
         while (bufferedReader.ready()) {
             final String line = bufferedReader.readLine();
             final String[] bookData = line.split(";");
-            Book book = new Book(bookData[0], bookData[1], bookData[2], bookData[3], bookData[4]);
+            Book book = new Book(Integer.parseInt(bookData[0]), bookData[1], bookData[2], bookData[3], bookData[4]);
             books.add(book);
         }
 
