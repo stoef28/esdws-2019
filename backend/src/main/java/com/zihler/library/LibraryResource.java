@@ -3,15 +3,18 @@ package com.zihler.library;
 import com.zihler.library.adapters.file_persistance.FileBasedBookRepository;
 import com.zihler.library.adapters.rest.RestRentalRecordPresenter;
 import com.zihler.library.domain.entities.Book;
-import com.zihler.library.domain.values.*;
+import com.zihler.library.domain.values.BookId;
+import com.zihler.library.domain.values.CustomerName;
+import com.zihler.library.domain.values.DaysRented;
 import com.zihler.library.use_cases.rent_books.RentBooks;
 import com.zihler.library.use_cases.rent_books.ports.RentBookRequest;
+import com.zihler.library.use_cases.rent_books.ports.RentBooksInput;
 import com.zihler.library.use_cases.rent_books.ports.RentBooksRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,10 +61,11 @@ public class LibraryResource {
         CustomerName customerName = CustomerName.from(rentBooksRequests.remove(0));
         List<RentBookRequest> rentBookRequests = toRequests(rentBooksRequests);
         RentBooksRequest rentBooksRequest = RentBooksRequest.from(customerName, rentBookRequests);
+        RentBooksInput rentBooksInput = new RentBooksInput(bookRepository, rentBooksRequest);
 
         RestRentalRecordPresenter restRentalRecordPresenter = new RestRentalRecordPresenter();
-        RentBooks rentBooks = new RentBooks(customerRepository, bookRepository);
-        rentBooks.with(rentBooksRequest, restRentalRecordPresenter);
+        RentBooks rentBooks = new RentBooks(customerRepository);
+        rentBooks.with(rentBooksInput, restRentalRecordPresenter);
 
         return restRentalRecordPresenter.presentation();
     }
