@@ -19,12 +19,12 @@ public class RentBooks implements IRentBooks {
     }
 
     @Override
-    public void with(RentBooksInput rentBooksInput, IPresentRentalRecords IPresentRentalRecords) {
+    public void with(RentBooksInput rentBooksInput, IPresentRentalRecords iPresentRentalRecords) {
         Customer customer = iFindCustomers.byName(rentBooksInput.customerName());
         List<Rental> rentals = rentBooksInput.rentals();
         RentalRecord rentalRecord = RentalRecord.from(customer, rentals);
         RentalRecordDocument rentalRecordDocument = rentalRecord.asDocument();
-        IPresentRentalRecords.present(rentalRecordDocument);
+        iPresentRentalRecords.from(rentalRecordDocument);
     }
 
 }

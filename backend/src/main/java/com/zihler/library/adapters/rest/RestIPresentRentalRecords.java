@@ -13,7 +13,7 @@ public class RestIPresentRentalRecords implements IPresentRentalRecords {
     }
 
     @Override
-    public void present(RentalRecordDocument rentalRecordDocument) {
+    public void from(RentalRecordDocument rentalRecordDocument) {
         String result = "Rental Record for " + rentalRecordDocument.customerName() + "\n";
         result += format(rentalRecordDocument.rentals());
         // add footer lines
