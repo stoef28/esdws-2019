@@ -1,4 +1,4 @@
-package com.zihler.library.use_cases.rent_books;
+package com.zihler.library.application.use_cases.rent_books;
 
 import com.zihler.library.Customer;
 import com.zihler.library.InMemoryCustomerRepository;
@@ -7,8 +7,8 @@ import com.zihler.library.adapters.rest.RestRentalRecordPresenter;
 import com.zihler.library.domain.entities.Book;
 import com.zihler.library.domain.values.Rental;
 import com.zihler.library.domain.values.RentalRecord;
-import com.zihler.library.use_cases.rent_books.ports.RentBookRequest;
-import com.zihler.library.use_cases.rent_books.ports.RentBooksRequest;
+import com.zihler.library.application.use_cases.rent_books.ports.RentBookRequest;
+import com.zihler.library.application.use_cases.rent_books.ports.RentBooksRequest;
 
 import java.util.ArrayList;
 import java.util.List;
