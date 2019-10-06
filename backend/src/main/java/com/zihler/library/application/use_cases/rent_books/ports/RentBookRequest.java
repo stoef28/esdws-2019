@@ -1,4 +1,4 @@
-package com.zihler.library.use_cases.rent_books.ports;
+package com.zihler.library.application.use_cases.rent_books.ports;
 
 import com.zihler.library.domain.values.BookId;
 import com.zihler.library.domain.values.DaysRented;
