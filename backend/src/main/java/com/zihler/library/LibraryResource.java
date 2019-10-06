@@ -19,11 +19,9 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 public class LibraryResource {
     private FileBasedBookRepository bookRepository;
     private InMemoryCustomerRepository customerRepository;
-    private ResourceLoader resourceLoader;
 
     @Autowired
     public LibraryResource(ResourceLoader resourceLoader) throws IOException {
-        this.resourceLoader = resourceLoader;
         this.customerRepository = new InMemoryCustomerRepository();
         this.bookRepository = new FileBasedBookRepository(resourceLoader);
     }
