@@ -94,7 +94,7 @@ public class LibraryResource {
     }
 
     private String format(List<Rental> rentals) {
-        String result="";
+        String result = "";
         for (Rental rental : rentals) {
             // create figures for this rental
             result += "\t'" + rental.getBookTitle() + "' by '" + rental.getBookAuthors() + "' for " + rental.getDaysRented() + " days: \t" + rental.getAmount() + " $\n";
