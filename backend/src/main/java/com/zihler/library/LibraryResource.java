@@ -1,7 +1,7 @@
 package com.zihler.library;
 
+import com.zihler.library.adapters.file_persistence.FileBasedBookRepository;
 import com.zihler.library.domain.entities.Book;
-import com.zihler.library.domain.entities.ReadingMode;
 import com.zihler.library.domain.values.Rental;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
@@ -20,11 +20,13 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 @RestController
 @RequestMapping("api/library")
 public class LibraryResource {
+    private final FileBasedBookRepository fileBasedBookRepository;
     private InMemoryCustomerRepository customerRepository;
     private ResourceLoader resourceLoader;
 
     @Autowired
     public LibraryResource(ResourceLoader resourceLoader) {
+        this.fileBasedBookRepository = new FileBasedBookRepository(resourceLoader);
         this.resourceLoader = resourceLoader;
         this.customerRepository = new InMemoryCustomerRepository();
     }
@@ -59,21 +61,6 @@ public class LibraryResource {
         // fetch customer
         Customer customer = customerRepository.findByUsername(customerName);
 
-        // fetch books
-        final BufferedReader bufferedReader = new BufferedReader(
-                new InputStreamReader(
-                        resourceLoader.getResource("classpath:books.csv").getInputStream(),
-                        StandardCharsets.UTF_8
-                )
-        );
-        final List<Book> books = new ArrayList<>();
-        while (bufferedReader.ready()) {
-            final String line = bufferedReader.readLine();
-            final String[] bookAsStings = line.split(";");
-            Book book = new Book(Integer.parseInt(bookAsStings[0]), bookAsStings[1], bookAsStings[2],ReadingMode.valueOf(bookAsStings[3]), bookAsStings[4]);
-            books.add(book);
-        }
-
         // calculate fee, frequent renter points, and document to display in front end
         double totalAmount = 0;
         int frequentRenterPoints = 0;
@@ -82,7 +69,7 @@ public class LibraryResource {
         for (String rentBooksRequest : rentBooksRequests) {
             final String[] rentalAsString = rentBooksRequest.split(" ");
             final Rental rental = new Rental(
-                    books.get(Integer.parseInt(rentalAsString[0])),
+                    fileBasedBookRepository.findById(Integer.parseInt(rentalAsString[0])),
                     Integer.parseInt(rentalAsString[1]));
 
             frequentRenterPoints += rental.getFrequentRenterPoints();
