@@ -1,12 +1,14 @@
 package com.zihler.library;
 
+import com.zihler.library.domain.entities.Book;
+import com.zihler.library.domain.entities.ReadingMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.*;
-import java.net.URISyntaxException;
-import java.nio.charset.Charset;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,10 +65,11 @@ public class LibraryResource {
                         StandardCharsets.UTF_8
                 )
         );
-        final List<String[]> books = new ArrayList<>();
+        final List<Book> books = new ArrayList<>();
         while (bufferedReader.ready()) {
             final String line = bufferedReader.readLine();
-            final String[] book = line.split(";");
+            final String[] bookAsStings = line.split(";");
+            Book book = new Book(Integer.parseInt(bookAsStings[0]), bookAsStings[1], bookAsStings[2],ReadingMode.valueOf(bookAsStings[3]), bookAsStings[4]);
             books.add(book);
         }
 
@@ -77,23 +80,23 @@ public class LibraryResource {
 
         for (int i = 0; i < rentBooksRequests.size(); i++) {
             final String[] rental = rentBooksRequests.get(i).split(" ");
-            final String[] book = books.get(Integer.parseInt(rental[0]));
+            final Book book = books.get(Integer.parseInt(rental[0]));
             double thisAmount = 0;
 
             int daysRented = Integer.parseInt(rental[1]);
-            String readingMode = book[3];
+            ReadingMode readingMode = book.getReadingMode();
             switch (readingMode) {
-                case "IMAGE":
+                case IMAGE:
                     thisAmount += 2;
                     if (daysRented > 2)
                         thisAmount += (daysRented - 2) * 1.5;
                     break;
-                case "TEXT":
+                case TEXT:
                     thisAmount += 1.5;
                     if (daysRented > 3)
                         thisAmount += (daysRented - 3) * 1.5;
                     break;
-                case "BOTH":
+                case BOTH:
                     thisAmount += daysRented * 3;
                 break;
             }
@@ -102,12 +105,12 @@ public class LibraryResource {
             frequentRenterPoints++;
 
             // add bonus for a reading mode "both"
-            if (readingMode.equals("BOTH") && daysRented > 1) {
+            if (readingMode.equals(ReadingMode.BOTH) && daysRented > 1) {
                 frequentRenterPoints++;
             }
 
             // create figures for this rental
-            result += "\t'" + book[1] + "' by '" + book[2] + "' for " + daysRented + " days: \t" + thisAmount + " $\n";
+            result += "\t'" + book.getTitle() + "' by '" + book.getAuthors() + "' for " + daysRented + " days: \t" + thisAmount + " $\n";
             totalAmount += thisAmount;
         }
 
