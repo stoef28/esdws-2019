@@ -1,6 +1,7 @@
 package com.zihler.library;
 
 import com.zihler.library.adapters.file_persistence.FileBasedBookRepository;
+import com.zihler.library.adapters.rest.RestRentalRecordPresenter;
 import com.zihler.library.application.use_cases.rent_books.ports.RentBookRequest;
 import com.zihler.library.domain.values.Rental;
 import com.zihler.library.domain.values.RentalRecord;
@@ -22,6 +23,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 @RequestMapping("api/library")
 public class LibraryResource {
     private final FileBasedBookRepository fileBasedBookRepository;
+    private final RestRentalRecordPresenter restRentalRecordPresenter = new RestRentalRecordPresenter();
     private InMemoryCustomerRepository customerRepository;
     private ResourceLoader resourceLoader;
 
@@ -66,13 +68,8 @@ public class LibraryResource {
         Customer customer = customerRepository.findByUsername(customerName);
         RentalRecord rentalRecord = new RentalRecord(customer, rentals);
 
-        String result = "Rental Record for " + rentalRecord.getCustomerName() + "\n";
-        result += format(rentalRecord.getRentals());
-        // add footer lines
-        result += "You owe " + rentalRecord.getTotalAmount() + " $\n";
-        result += "You earned " + rentalRecord.getFrequentRenterPoints() + " frequent renter points\n";
-
-        return List.of(result);
+        restRentalRecordPresenter.present(rentalRecord);
+        return restRentalRecordPresenter.presentation();
     }
 
     private List<RentBookRequest> getRentBookRequests(@RequestBody List<String> rentBooksRequests) {
@@ -85,23 +82,6 @@ public class LibraryResource {
             rentBookRequests.add(rentBookRequest);
         }
         return rentBookRequests;
-    }
-
-    private String format(List<Rental> rentals) {
-        StringBuilder result = new StringBuilder();
-        for (Rental rental : rentals) {
-            // create figures for this rental
-            result.append("\t'")
-                    .append(rental.getBookTitle())
-                    .append("' by '")
-                    .append(rental.getBookAuthors())
-                    .append("' for ")
-                    .append(rental.getDaysRented())
-                    .append(" days: \t")
-                    .append(rental.getAmount())
-                    .append(" $\n");
-        }
-        return result.toString();
     }
 
     private List<Rental> getRentals(@RequestBody List<RentBookRequest> rentBooksRequests) {
