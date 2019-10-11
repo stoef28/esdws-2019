@@ -2,6 +2,7 @@ package com.zihler.library;
 
 import com.zihler.library.domain.entities.Book;
 import com.zihler.library.domain.entities.ReadingMode;
+import com.zihler.library.domain.values.Rental;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.web.bind.annotation.*;
@@ -78,40 +79,17 @@ public class LibraryResource {
         int frequentRenterPoints = 0;
         String result = "Rental Record for " + customer.getName() + "\n";
 
-        for (int i = 0; i < rentBooksRequests.size(); i++) {
-            final String[] rental = rentBooksRequests.get(i).split(" ");
-            final Book book = books.get(Integer.parseInt(rental[0]));
-            double thisAmount = 0;
+        for (String rentBooksRequest : rentBooksRequests) {
+            final String[] rentalAsString = rentBooksRequest.split(" ");
+            final Rental rental = new Rental(
+                    books.get(Integer.parseInt(rentalAsString[0])),
+                    Integer.parseInt(rentalAsString[1]));
 
-            int daysRented = Integer.parseInt(rental[1]);
-            ReadingMode readingMode = book.getReadingMode();
-            switch (readingMode) {
-                case IMAGE:
-                    thisAmount += 2;
-                    if (daysRented > 2)
-                        thisAmount += (daysRented - 2) * 1.5;
-                    break;
-                case TEXT:
-                    thisAmount += 1.5;
-                    if (daysRented > 3)
-                        thisAmount += (daysRented - 3) * 1.5;
-                    break;
-                case BOTH:
-                    thisAmount += daysRented * 3;
-                break;
-            }
-
-            // add frequent renter points
-            frequentRenterPoints++;
-
-            // add bonus for a reading mode "both"
-            if (readingMode.equals(ReadingMode.BOTH) && daysRented > 1) {
-                frequentRenterPoints++;
-            }
+            frequentRenterPoints += rental.getFrequentRenterPoints();
 
             // create figures for this rental
-            result += "\t'" + book.getTitle() + "' by '" + book.getAuthors() + "' for " + daysRented + " days: \t" + thisAmount + " $\n";
-            totalAmount += thisAmount;
+            result += "\t'" + rental.getBookTitle() + "' by '" + rental.getBookAuthors() + "' for " + rental.getDaysRented() + " days: \t" + rental.getAmount() + " $\n";
+            totalAmount += rental.getAmount();
         }
 
         // add footer lines
@@ -120,5 +98,6 @@ public class LibraryResource {
 
         return List.of(result);
     }
+
 }
 
