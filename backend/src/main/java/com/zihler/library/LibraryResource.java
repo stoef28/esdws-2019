@@ -2,9 +2,8 @@ package com.zihler.library;
 
 import com.zihler.library.adapters.file_persistence.FileBasedBookRepository;
 import com.zihler.library.adapters.rest.RestRentalRecordPresenter;
+import com.zihler.library.application.use_cases.rent_books.RentBooks;
 import com.zihler.library.application.use_cases.rent_books.ports.RentBookRequest;
-import com.zihler.library.domain.values.Rental;
-import com.zihler.library.domain.values.RentalRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.web.bind.annotation.*;
@@ -22,16 +21,14 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 @RestController
 @RequestMapping("api/library")
 public class LibraryResource {
-    private final FileBasedBookRepository fileBasedBookRepository;
     private final RestRentalRecordPresenter restRentalRecordPresenter = new RestRentalRecordPresenter();
-    private InMemoryCustomerRepository customerRepository;
+    private final RentBooks rentBooks;
     private ResourceLoader resourceLoader;
 
     @Autowired
     public LibraryResource(ResourceLoader resourceLoader) {
-        this.fileBasedBookRepository = new FileBasedBookRepository(resourceLoader);
         this.resourceLoader = resourceLoader;
-        this.customerRepository = new InMemoryCustomerRepository();
+        this.rentBooks = new RentBooks(resourceLoader);
     }
 
     @GetMapping(
@@ -63,13 +60,9 @@ public class LibraryResource {
         // fetch customer
 
         List<RentBookRequest> rentBookRequests = getRentBookRequests(rentBooksRequests);
-        List<Rental> rentals = getRentals(rentBookRequests);
 
-        Customer customer = customerRepository.findByUsername(customerName);
-        RentalRecord rentalRecord = new RentalRecord(customer, rentals);
 
-        restRentalRecordPresenter.present(rentalRecord);
-        return restRentalRecordPresenter.presentation();
+        return rentBooks.executeWith(customerName, rentBookRequests, restRentalRecordPresenter);
     }
 
     private List<RentBookRequest> getRentBookRequests(@RequestBody List<String> rentBooksRequests) {
@@ -82,17 +75,6 @@ public class LibraryResource {
             rentBookRequests.add(rentBookRequest);
         }
         return rentBookRequests;
-    }
-
-    private List<Rental> getRentals(@RequestBody List<RentBookRequest> rentBooksRequests) {
-        List<Rental> rentals = new ArrayList<>();
-        for (RentBookRequest rentBookRequest : rentBooksRequests) {
-            final Rental rental = new Rental(
-                    fileBasedBookRepository.findById(rentBookRequest.getBookId()),
-                    rentBookRequest.getDaysRented());
-            rentals.add(rental);
-        }
-        return rentals;
     }
 
 }
