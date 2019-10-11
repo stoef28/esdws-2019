@@ -1,8 +1,10 @@
 package com.zihler.library;
 
+import com.zihler.library.adapters.file_persistence.FileBasedBookRepository;
 import com.zihler.library.adapters.rest.RestRentalRecordPresenter;
 import com.zihler.library.application.use_cases.rent_books.RentBooks;
 import com.zihler.library.application.use_cases.rent_books.ports.RentBookRequest;
+import com.zihler.library.application.use_cases.rent_books.ports.RentBooksInput;
 import com.zihler.library.application.use_cases.rent_books.ports.RentBooksRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
@@ -21,13 +23,15 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 @RestController
 @RequestMapping("api/library")
 public class LibraryResource {
+    private final FileBasedBookRepository fileBasedBookRepository;
     private final RentBooks rentBooks;
     private ResourceLoader resourceLoader;
 
     @Autowired
     public LibraryResource(ResourceLoader resourceLoader) {
+        this.fileBasedBookRepository = new FileBasedBookRepository(resourceLoader);
         this.resourceLoader = resourceLoader;
-        this.rentBooks = new RentBooks(resourceLoader);
+        this.rentBooks = new RentBooks();
     }
 
     @GetMapping(
@@ -56,12 +60,10 @@ public class LibraryResource {
             throw new IllegalArgumentException("rent books requests cannot be null!");
         }
         String customerName = rentBooksRequests.remove(0);
-        // fetch customer
-
         List<RentBookRequest> rentBookRequests = getRentBookRequests(rentBooksRequests);
 
         RestRentalRecordPresenter restRentalRecordPresenter = new RestRentalRecordPresenter();
-        return rentBooks.executeWith(new RentBooksRequest(customerName, rentBookRequests), restRentalRecordPresenter);
+        return rentBooks.executeWith(new RentBooksInput(new RentBooksRequest(customerName, rentBookRequests), fileBasedBookRepository), restRentalRecordPresenter);
     }
 
     private List<RentBookRequest> getRentBookRequests(@RequestBody List<String> rentBooksRequests) {
