@@ -61,29 +61,54 @@ public class LibraryResource {
         // fetch customer
         Customer customer = customerRepository.findByUsername(customerName);
 
-        // calculate fee, frequent renter points, and document to display in front end
-        double totalAmount = 0;
-        int frequentRenterPoints = 0;
-        String result = "Rental Record for " + customer.getName() + "\n";
+        List<Rental> rentals = getRentals(rentBooksRequests);
 
-        for (String rentBooksRequest : rentBooksRequests) {
-            final String[] rentalAsString = rentBooksRequest.split(" ");
-            final Rental rental = new Rental(
-                    fileBasedBookRepository.findById(Integer.parseInt(rentalAsString[0])),
-                    Integer.parseInt(rentalAsString[1]));
-
-            frequentRenterPoints += rental.getFrequentRenterPoints();
-
-            // create figures for this rental
-            result += "\t'" + rental.getBookTitle() + "' by '" + rental.getBookAuthors() + "' for " + rental.getDaysRented() + " days: \t" + rental.getAmount() + " $\n";
-            totalAmount += rental.getAmount();
-        }
+        int frequentRenterPoints = getFrequentRenterPoints(rentals);
+        String result = format(customer, rentals);
+        double totalAmount = getTotalAmount(rentals);
 
         // add footer lines
         result += "You owe " + totalAmount + " $\n";
         result += "You earned " + frequentRenterPoints + " frequent renter points\n";
 
         return List.of(result);
+    }
+
+    private double getTotalAmount(List<Rental> rentals) {
+        double totalAmount = 0;
+        for (Rental rental : rentals) {
+            totalAmount += rental.getAmount();
+        }
+        return totalAmount;
+    }
+
+    private String format(Customer customer, List<Rental> rentals) {
+        String result = "Rental Record for " + customer.getName() + "\n";
+        for (Rental rental : rentals) {
+            // create figures for this rental
+            result += "\t'" + rental.getBookTitle() + "' by '" + rental.getBookAuthors() + "' for " + rental.getDaysRented() + " days: \t" + rental.getAmount() + " $\n";
+        }
+        return result;
+    }
+
+    private int getFrequentRenterPoints(List<Rental> rentals) {
+        int frequentRenterPoints = 0;
+        for (Rental rental : rentals) {
+            frequentRenterPoints += rental.getFrequentRenterPoints();
+        }
+        return frequentRenterPoints;
+    }
+
+    private List<Rental> getRentals(@RequestBody List<String> rentBooksRequests) {
+        List<Rental> rentals = new ArrayList<>();
+        for (String rentBooksRequest : rentBooksRequests) {
+            final String[] rentalAsString = rentBooksRequest.split(" ");
+            final Rental rental = new Rental(
+                    fileBasedBookRepository.findById(Integer.parseInt(rentalAsString[0])),
+                    Integer.parseInt(rentalAsString[1]));
+            rentals.add(rental);
+        }
+        return rentals;
     }
 
 }
