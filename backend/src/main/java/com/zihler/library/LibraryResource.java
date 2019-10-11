@@ -1,9 +1,9 @@
 package com.zihler.library;
 
-import com.zihler.library.adapters.file_persistence.FileBasedBookRepository;
 import com.zihler.library.adapters.rest.RestRentalRecordPresenter;
 import com.zihler.library.application.use_cases.rent_books.RentBooks;
 import com.zihler.library.application.use_cases.rent_books.ports.RentBookRequest;
+import com.zihler.library.application.use_cases.rent_books.ports.RentBooksRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +21,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 @RestController
 @RequestMapping("api/library")
 public class LibraryResource {
-    private final RestRentalRecordPresenter restRentalRecordPresenter = new RestRentalRecordPresenter();
     private final RentBooks rentBooks;
     private ResourceLoader resourceLoader;
 
@@ -61,8 +60,8 @@ public class LibraryResource {
 
         List<RentBookRequest> rentBookRequests = getRentBookRequests(rentBooksRequests);
 
-
-        return rentBooks.executeWith(customerName, rentBookRequests, restRentalRecordPresenter);
+        RestRentalRecordPresenter restRentalRecordPresenter = new RestRentalRecordPresenter();
+        return rentBooks.executeWith(new RentBooksRequest(customerName, rentBookRequests), restRentalRecordPresenter);
     }
 
     private List<RentBookRequest> getRentBookRequests(@RequestBody List<String> rentBooksRequests) {
