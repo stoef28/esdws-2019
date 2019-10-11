@@ -1,7 +1,7 @@
 package com.zihler.library;
 
 import com.zihler.library.adapters.file_persistence.FileBasedBookRepository;
-import com.zihler.library.domain.entities.Book;
+import com.zihler.library.application.use_cases.rent_books.ports.RentBookRequest;
 import com.zihler.library.domain.values.Rental;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
@@ -57,21 +57,31 @@ public class LibraryResource {
             throw new IllegalArgumentException("rent books requests cannot be null!");
         }
         String customerName = rentBooksRequests.remove(0);
-
         // fetch customer
         Customer customer = customerRepository.findByUsername(customerName);
 
-        List<Rental> rentals = getRentals(rentBooksRequests);
+        List<RentBookRequest> rentBookRequests = getRentBookRequests(rentBooksRequests);
+        List<Rental> rentals = getRentals(rentBookRequests);
 
-        int frequentRenterPoints = getFrequentRenterPoints(rentals);
-        String result = format(customer, rentals);
-        double totalAmount = getTotalAmount(rentals);
-
+        String result = "Rental Record for " + customer.getName() + "\n";
+        result += format(rentals);
         // add footer lines
-        result += "You owe " + totalAmount + " $\n";
-        result += "You earned " + frequentRenterPoints + " frequent renter points\n";
+        result += "You owe " + getTotalAmount(rentals) + " $\n";
+        result += "You earned " + getFrequentRenterPoints(rentals) + " frequent renter points\n";
 
         return List.of(result);
+    }
+
+    private List<RentBookRequest> getRentBookRequests(@RequestBody List<String> rentBooksRequests) {
+        List<RentBookRequest> rentBookRequests = new ArrayList<>();
+        for (String rentBooksRequest : rentBooksRequests) {
+            final String[] rentalAsString = rentBooksRequest.split(" ");
+            final RentBookRequest rentBookRequest = new RentBookRequest(
+                    Integer.parseInt(rentalAsString[0]),
+                    Integer.parseInt(rentalAsString[1]));
+            rentBookRequests.add(rentBookRequest);
+        }
+        return rentBookRequests;
     }
 
     private double getTotalAmount(List<Rental> rentals) {
@@ -82,13 +92,21 @@ public class LibraryResource {
         return totalAmount;
     }
 
-    private String format(Customer customer, List<Rental> rentals) {
-        String result = "Rental Record for " + customer.getName() + "\n";
+    private String format(List<Rental> rentals) {
+        StringBuilder result = new StringBuilder();
         for (Rental rental : rentals) {
             // create figures for this rental
-            result += "\t'" + rental.getBookTitle() + "' by '" + rental.getBookAuthors() + "' for " + rental.getDaysRented() + " days: \t" + rental.getAmount() + " $\n";
+            result.append("\t'")
+                    .append(rental.getBookTitle())
+                    .append("' by '")
+                    .append(rental.getBookAuthors())
+                    .append("' for ")
+                    .append(rental.getDaysRented())
+                    .append(" days: \t")
+                    .append(rental.getAmount())
+                    .append(" $\n");
         }
-        return result;
+        return result.toString();
     }
 
     private int getFrequentRenterPoints(List<Rental> rentals) {
@@ -99,13 +117,12 @@ public class LibraryResource {
         return frequentRenterPoints;
     }
 
-    private List<Rental> getRentals(@RequestBody List<String> rentBooksRequests) {
+    private List<Rental> getRentals(@RequestBody List<RentBookRequest> rentBooksRequests) {
         List<Rental> rentals = new ArrayList<>();
-        for (String rentBooksRequest : rentBooksRequests) {
-            final String[] rentalAsString = rentBooksRequest.split(" ");
+        for (RentBookRequest rentBookRequest : rentBooksRequests) {
             final Rental rental = new Rental(
-                    fileBasedBookRepository.findById(Integer.parseInt(rentalAsString[0])),
-                    Integer.parseInt(rentalAsString[1]));
+                    fileBasedBookRepository.findById(rentBookRequest.getBookId()),
+                    rentBookRequest.getDaysRented());
             rentals.add(rental);
         }
         return rentals;
