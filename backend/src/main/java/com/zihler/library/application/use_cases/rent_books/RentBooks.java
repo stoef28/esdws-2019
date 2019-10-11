@@ -22,7 +22,7 @@ public class RentBooks {
         Customer customer = customerRepository.findByUsername(rentBooksInput.getCustomerName());
         RentalRecord rentalRecord = new RentalRecord(customer, rentals);
 
-        presenter.present(rentalRecord);
+        presenter.present(rentalRecord.asDocument());
         return presenter.presentation();
     }
 

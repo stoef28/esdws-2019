@@ -57,4 +57,8 @@ public class Rental {
     public String getBookAuthors() {
         return getBook().getAuthors();
     }
+
+    public RentalDocument asDocument() {
+        return new RentalDocument(getAmount(),daysRented,getBookAuthors(),getBookTitle());
+    }
 }

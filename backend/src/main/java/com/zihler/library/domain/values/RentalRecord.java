@@ -2,6 +2,7 @@ package com.zihler.library.domain.values;
 
 import com.zihler.library.Customer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RentalRecord {
@@ -39,5 +40,17 @@ public class RentalRecord {
             frequentRenterPoints += rental.getFrequentRenterPoints();
         }
         return frequentRenterPoints;
+    }
+
+    public RentalRecordDocument asDocument(){
+        return new RentalRecordDocument(getCustomerName(),getFrequentRenterPoints(),getRentalsAsDocument(),getTotalAmount());
+    }
+
+    private List<RentalDocument> getRentalsAsDocument() {
+        List<RentalDocument> rentalDocuments = new ArrayList<>();
+        for (Rental rental : rentals) {
+            rentalDocuments.add(rental.asDocument());
+        }
+        return rentalDocuments;
     }
 }
