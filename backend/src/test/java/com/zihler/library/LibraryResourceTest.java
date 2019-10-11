@@ -1,5 +1,6 @@
 package com.zihler.library;
 
+import com.zihler.library.adapters.rest.LibraryResource;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

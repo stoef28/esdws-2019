@@ -1,6 +1,6 @@
 package com.zihler.library.domain.values;
 
-import com.zihler.library.Customer;
+import com.zihler.library.domain.entities.Customer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,10 +43,10 @@ public class RentalRecord {
     }
 
     public RentalRecordDocument asDocument(){
-        return new RentalRecordDocument(getCustomerName(),getFrequentRenterPoints(),getRentalsAsDocument(),getTotalAmount());
+        return new RentalRecordDocument(this);
     }
 
-    private List<RentalDocument> getRentalsAsDocument() {
+    public List<RentalDocument> getRentalsAsDocument() {
         List<RentalDocument> rentalDocuments = new ArrayList<>();
         for (Rental rental : rentals) {
             rentalDocuments.add(rental.asDocument());

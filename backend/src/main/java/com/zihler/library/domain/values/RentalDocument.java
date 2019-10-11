@@ -13,6 +13,13 @@ public class RentalDocument {
         this.bookTitle = bookTitle;
     }
 
+    public RentalDocument(Rental rental) {
+        this.amount = rental.getAmount();
+        this.daysRented = rental.getDaysRented();
+        this.bookAuthors = rental.getBookAuthors();
+        this.bookTitle = rental.getBookTitle();
+    }
+
     public double getAmount() {
         return amount;
     }

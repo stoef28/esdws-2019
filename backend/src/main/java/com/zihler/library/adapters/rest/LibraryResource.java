@@ -1,7 +1,8 @@
-package com.zihler.library;
+package com.zihler.library.adapters.rest;
 
 import com.zihler.library.adapters.file_persistence.FileBasedBookRepository;
-import com.zihler.library.adapters.rest.RestRentalRecordPresenter;
+import com.zihler.library.application.outbound_ports.persistance.BookRepository;
+import com.zihler.library.application.use_cases.ports.IRentBooks;
 import com.zihler.library.application.use_cases.rent_books.RentBooks;
 import com.zihler.library.application.use_cases.rent_books.ports.RentBookRequest;
 import com.zihler.library.application.use_cases.rent_books.ports.RentBooksInput;
@@ -23,13 +24,13 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 @RestController
 @RequestMapping("api/library")
 public class LibraryResource {
-    private final FileBasedBookRepository fileBasedBookRepository;
-    private final RentBooks rentBooks;
+    private final BookRepository bookRepository;
+    private final IRentBooks rentBooks;
     private ResourceLoader resourceLoader;
 
     @Autowired
     public LibraryResource(ResourceLoader resourceLoader) {
-        this.fileBasedBookRepository = new FileBasedBookRepository(resourceLoader);
+        this.bookRepository = new FileBasedBookRepository(resourceLoader);
         this.resourceLoader = resourceLoader;
         this.rentBooks = new RentBooks();
     }
@@ -63,7 +64,9 @@ public class LibraryResource {
         List<RentBookRequest> rentBookRequests = getRentBookRequests(rentBooksRequests);
 
         RestRentalRecordPresenter restRentalRecordPresenter = new RestRentalRecordPresenter();
-        return rentBooks.executeWith(new RentBooksInput(new RentBooksRequest(customerName, rentBookRequests), fileBasedBookRepository), restRentalRecordPresenter);
+        RentBooksRequest rentBooksRequest = new RentBooksRequest(customerName, rentBookRequests);
+        RentBooksInput rentBooksInput = new RentBooksInput(rentBooksRequest, bookRepository);
+        return rentBooks.executeWith(rentBooksInput, restRentalRecordPresenter);
     }
 
     private List<RentBookRequest> getRentBookRequests(@RequestBody List<String> rentBooksRequests) {

@@ -59,6 +59,6 @@ public class Rental {
     }
 
     public RentalDocument asDocument() {
-        return new RentalDocument(getAmount(),daysRented,getBookAuthors(),getBookTitle());
+        return new RentalDocument(this);
     }
 }

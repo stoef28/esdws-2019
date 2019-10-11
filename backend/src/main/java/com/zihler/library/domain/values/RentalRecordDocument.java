@@ -15,6 +15,13 @@ public class RentalRecordDocument {
         this.totalAmount = totalAmount;
     }
 
+    public RentalRecordDocument(RentalRecord rentalRecord) {
+        this.customerName = rentalRecord.getCustomerName();
+        this.frequentRenterPoints = rentalRecord.getFrequentRenterPoints();
+        this.rentals = rentalRecord.getRentalsAsDocument();
+        this.totalAmount = rentalRecord.getTotalAmount();
+    }
+
     public String getCustomerName() {
         return customerName;
     }

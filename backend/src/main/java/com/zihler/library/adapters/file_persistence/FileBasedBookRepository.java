@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class FileBasedBookRepository {
+public class FileBasedBookRepository implements com.zihler.library.application.outbound_ports.persistance.BookRepository {
 
     private List<Book> books;
 
@@ -38,10 +38,12 @@ public class FileBasedBookRepository {
         }
     }
 
+    @Override
     public List<Book> getAllBooks() {
         return books;
     }
 
+    @Override
     public Book findById(int id) {
         return books.get(id);
     }

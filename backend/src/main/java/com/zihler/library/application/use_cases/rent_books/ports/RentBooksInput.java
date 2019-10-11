@@ -1,18 +1,18 @@
 package com.zihler.library.application.use_cases.rent_books.ports;
 
-import com.zihler.library.adapters.file_persistence.FileBasedBookRepository;
+import com.zihler.library.application.outbound_ports.persistance.BookRepository;
 import com.zihler.library.domain.values.Rental;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class RentBooksInput {
-    private final FileBasedBookRepository fileBasedBookRepository;
+    private final BookRepository bookRepository;
     private final RentBooksRequest rentBooksRequest;
 
-    public RentBooksInput(RentBooksRequest rentBooksRequest, FileBasedBookRepository fileBasedBookRepository) {
+    public RentBooksInput(RentBooksRequest rentBooksRequest, BookRepository bookRepository) {
         this.rentBooksRequest = rentBooksRequest;
-        this.fileBasedBookRepository = fileBasedBookRepository;
+        this.bookRepository = bookRepository;
     }
 
     private RentBooksRequest getRentBooksRequest() {
@@ -23,7 +23,7 @@ public class RentBooksInput {
         List<Rental> rentals = new ArrayList<>();
         for (RentBookRequest rentBookRequest : rentBooksRequest.getRentBookRequests()) {
             final Rental rental = new Rental(
-                    fileBasedBookRepository.findById(rentBookRequest.getBookId()),
+                    bookRepository.findById(rentBookRequest.getBookId()),
                     rentBookRequest.getDaysRented());
             rentals.add(rental);
         }
